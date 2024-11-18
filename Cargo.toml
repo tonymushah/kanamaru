@@ -1,0 +1,19 @@
+
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+default-members = ["crates/core"]
+
+[workspace.dependencies]
+async-trait = "0.1"
+bytes = "1.8"
+darling = "0.20"
+proc-macro2 = "1"
+prost = "0.13"
+prost-build = "0.13"
+serde = "1.0"
+syn = "2.0"
+tauri = "2"
+thiserror = "1"
+prost-types = "0.13"
+heck = "0.5"
