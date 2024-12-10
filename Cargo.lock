@@ -1651,15 +1651,18 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "bytes",
- "darling",
  "proc-macro2",
  "prost",
  "prost-build",
  "serde",
- "syn 2.0.87",
  "tauri",
  "thiserror 1.0.69",
+ "tower",
 ]
+
+[[package]]
+name = "kanamaru-build"
+version = "0.1.0"
 
 [[package]]
 name = "keyboard-types"
@@ -2574,6 +2577,10 @@ dependencies = [
  "quote",
  "syn 2.0.87",
 ]
+
+[[package]]
+name = "prost-playground"
+version = "0.1.0"
 
 [[package]]
 name = "prost-types"
@@ -3692,6 +3699,22 @@ dependencies = [
  "toml_datetime",
  "winnow",
 ]
+
+[[package]]
+name = "tower"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2873938d487c3cfb9aed7546dc9f2711d867c9f90c46b889989a2cb84eba6b4f"
+dependencies = [
+ "tower-layer",
+ "tower-service",
+]
+
+[[package]]
+name = "tower-layer"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "121c2a6cda46980bb0fcd1647ffaf6cd3fc79a013de288782836f6df9c48780e"
 
 [[package]]
 name = "tower-service"
