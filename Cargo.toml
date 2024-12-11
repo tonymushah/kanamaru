@@ -18,3 +18,7 @@ thiserror = "1"
 prost-types = "0.13"
 heck = "0.5"
 tower = "0.5"
+base64 = "0.22"
+tokio-stream = "0.1"
+tokio = {version = "1", features = ["rt", "rt-multi-thread"]}
+tokio-util = "0.7"
