@@ -14,7 +14,7 @@ tauri.workspace = true
 thiserror.workspace = true
 tower.workspace = true
 base64.workspace = true
-tokio-stream.workspace = true
+tokio-stream = { workspace = true, features = ["sync"] }
 tokio.workspace = true
 tokio-util.workspace = true
 serde_json.workspace = true
