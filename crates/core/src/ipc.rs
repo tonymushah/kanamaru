@@ -1,3 +1,5 @@
+pub mod request;
+
 use base64::prelude::*;
 use prost::Message;
 use serde::{Deserialize, Serialize};
