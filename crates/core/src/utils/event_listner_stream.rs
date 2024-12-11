@@ -90,6 +90,7 @@ where
             if let Some(data) = self.receiver.borrow().as_ref() {
                 Poll::Ready(Some(data.clone()))
             } else {
+                cx.waker().wake_by_ref();
                 Poll::Pending
             }
         } else {
