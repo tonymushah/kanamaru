@@ -5,7 +5,7 @@ use prost::Message;
 use serde::{Deserialize, Serialize};
 use tauri::http::HeaderMap;
 
-#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq, Default)]
 pub struct IpcBody {
     #[serde(with = "self::header_map")]
     pub metadata: HeaderMap,
