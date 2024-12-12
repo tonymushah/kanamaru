@@ -1,6 +1,7 @@
 pub mod streaming;
 pub mod unary;
 
+pub use streaming::StreamingRequest;
 pub use unary::UnaryRequest;
 
 use std::sync::Arc;

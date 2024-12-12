@@ -118,4 +118,4 @@ where
     }
 }
 
-pub use request::*;
+pub use request::{StreamingRequest, UnaryRequest};
