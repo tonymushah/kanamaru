@@ -12,7 +12,7 @@ pub struct IpcMessageBase {
     pub body: Option<String>,
 }
 
-mod header_map {
+pub(crate) mod header_map {
     use std::{collections::HashMap, str::FromStr};
 
     use serde::{ser::SerializeMap, Deserialize, Deserializer, Serializer};
