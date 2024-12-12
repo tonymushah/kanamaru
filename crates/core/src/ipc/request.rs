@@ -1,3 +1,4 @@
+pub mod streaming;
 pub mod unary;
 
 pub use unary::UnaryRequest;
@@ -38,6 +39,8 @@ pub enum RawRequestToRequestError {
     IpcBodyExtractMessage(#[from] IpcBodyExtractMessageError),
     #[error("The invoke message payload format is invalid which is raw")]
     InvalidPayloadFormat,
+    #[error("the client streaming event id is missing in the request")]
+    MissingClientStreamingEventId,
 }
 
 #[derive(Debug, thiserror::Error)]
