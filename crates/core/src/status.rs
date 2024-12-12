@@ -85,7 +85,7 @@ impl Serialize for Code {
 impl Code {
     /// Get description of this `Code`.
     /// ```
-    /// fn make_grpc_request() -> tonic::Code {
+    /// fn make_grpc_request() -> kanamaru::Code {
     ///     // ...
     ///     kanamaru::Code::Ok
     /// }
