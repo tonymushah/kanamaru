@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use tauri::http::HeaderMap;
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq, Default)]
-pub struct IpcBody {
+pub struct IpcMessageBase {
     #[serde(with = "self::header_map")]
     pub metadata: HeaderMap,
     pub body: Option<String>,
@@ -49,10 +49,10 @@ mod header_map {
     }
 }
 
-impl<M: Message> From<M> for IpcBody {
+impl<M: Message> From<M> for IpcMessageBase {
     fn from(value: M) -> Self {
         let body = Some(BASE64_STANDARD.encode(value.encode_to_vec()));
-        IpcBody {
+        IpcMessageBase {
             metadata: HeaderMap::new(),
             body,
         }
@@ -66,7 +66,7 @@ pub enum IpcBodyExtractMessageError {
     Prost(#[from] prost::DecodeError),
 }
 
-impl IpcBody {
+impl IpcMessageBase {
     pub fn is_empty(&self) -> bool {
         self.body.is_none()
     }

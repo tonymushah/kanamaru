@@ -11,12 +11,12 @@ use tokio_util::sync::CancellationToken;
 
 use crate::utils::CancellationTokenListener;
 
-use super::{IpcBody, IpcBodyExtractMessageError};
+use super::{IpcBodyExtractMessageError, IpcMessageBase};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct RawRequest {
     pub cancel_token_event_id: String,
-    pub payload: Option<IpcBody>,
+    pub payload: Option<IpcMessageBase>,
     pub client_streaming_event_id: Option<String>,
     pub server_streaming_evente_id: Option<String>,
 }
