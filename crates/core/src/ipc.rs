@@ -80,3 +80,40 @@ impl IpcMessageBase {
         }
     }
 }
+
+#[derive(Debug, Clone, Default)]
+pub struct IpcMessage<M> {
+    pub metadata: HeaderMap,
+    pub body: M,
+}
+
+impl<M> IpcMessage<M> {
+    pub fn new(body: M) -> Self {
+        Self {
+            metadata: Default::default(),
+            body,
+        }
+    }
+    pub fn new_with_metadata(body: M, metadata: HeaderMap) -> Self {
+        Self { metadata, body }
+    }
+}
+
+impl<M: Message> From<IpcMessage<M>> for IpcMessageBase {
+    fn from(value: IpcMessage<M>) -> Self {
+        let mut base = Self::from(value.body);
+        base.metadata = value.metadata;
+        base
+    }
+}
+
+impl<M> TryFrom<IpcMessageBase> for IpcMessage<M>
+where
+    M: Message + Default,
+{
+    type Error = IpcBodyExtractMessageError;
+    fn try_from(value: IpcMessageBase) -> Result<Self, Self::Error> {
+        let body = value.extract_message::<M>()?;
+        Ok(Self::new_with_metadata(body, value.metadata))
+    }
+}
