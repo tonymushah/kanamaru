@@ -1,5 +1,7 @@
+pub mod message;
+
 use std::{
-    future::{Future, IntoFuture},
+    future::Future,
     marker::PhantomData,
     task::{ready, Poll},
 };
