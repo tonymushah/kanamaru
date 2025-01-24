@@ -16,6 +16,7 @@ use super::{IpcBodyExtractMessageError, IpcMessageBase};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct RawRequest {
+    pub route: String,
     pub cancel_token_event_id: String,
     pub payload: Option<IpcMessageBase>,
     pub client_streaming_event_id: Option<String>,
