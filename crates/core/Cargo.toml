@@ -18,3 +18,5 @@ tokio-stream = { workspace = true, features = ["sync"] }
 tokio.workspace = true
 tokio-util.workspace = true
 serde_json.workspace = true
+schemars.workspace = true
+regex = "1"

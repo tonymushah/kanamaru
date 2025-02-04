@@ -1898,6 +1898,8 @@ dependencies = [
  "proc-macro2",
  "prost",
  "prost-build",
+ "regex",
+ "schemars",
  "serde",
  "serde_json",
  "tauri",
@@ -1920,6 +1922,7 @@ dependencies = [
  "prost-types",
  "quote",
  "schemars",
+ "serde",
  "syn 2.0.96",
  "tauri-plugin",
 ]
