@@ -10,7 +10,7 @@ proc-macro2.workspace = true
 prost.workspace = true
 prost-build.workspace = true
 serde.workspace = true
-tauri.workspace = true
+tauri = { workspace = true, default-features = false }
 thiserror.workspace = true
 tower.workspace = true
 base64.workspace = true

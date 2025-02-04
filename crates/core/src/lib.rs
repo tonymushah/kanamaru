@@ -11,5 +11,6 @@ pub use async_trait::async_trait;
 pub use ipc::{
     request::RequestBase, StreamingRequest, StreamingResponse, UnaryRequest, UnaryResponse,
 };
+pub use plugin::{builder::Builder, KanamaruPlugin};
 pub use responder::{RPCType, Responder, Routes};
 pub use status::{AsCode, Code, Status};

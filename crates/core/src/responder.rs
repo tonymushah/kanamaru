@@ -31,8 +31,13 @@ pub trait Responder<R: Runtime> {
     fn respond(&self, message: RawRequest, webview: Webview<R>, resovler: InvokeResolver<R>);
 }
 
-#[derive(Default)]
 pub struct Routes<R: Runtime>(HashMap<String, Arc<Box<dyn Responder<R> + Send + Sync + 'static>>>);
+
+impl<R: Runtime> Default for Routes<R> {
+    fn default() -> Self {
+        Routes(HashMap::new())
+    }
+}
 
 impl<R: Runtime> Routes<R> {
     pub fn add_responder(mut self, responder: impl Responder<R> + Send + Sync + 'static) -> Self {
