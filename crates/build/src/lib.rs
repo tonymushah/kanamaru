@@ -1,14 +1,7 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+pub mod codegen;
+mod prost;
+pub mod utils;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub(crate) const COMMANDS: &[&str] = &[""];
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub struct Builder {}

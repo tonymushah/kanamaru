@@ -120,3 +120,5 @@ where
 }
 
 pub use request::{StreamingRequest, UnaryRequest};
+
+pub use response::{StreamingResponse, UnaryResponse};

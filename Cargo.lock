@@ -1911,6 +1911,18 @@ dependencies = [
 [[package]]
 name = "kanamaru-build"
 version = "0.1.0"
+dependencies = [
+ "heck 0.5.0",
+ "prettyplease",
+ "proc-macro2",
+ "prost",
+ "prost-build",
+ "prost-types",
+ "quote",
+ "schemars",
+ "syn 2.0.96",
+ "tauri-plugin",
+]
 
 [[package]]
 name = "keyboard-types"

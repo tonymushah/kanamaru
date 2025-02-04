@@ -4,3 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+proc-macro2.workspace = true
+prost-build.workspace = true
+prost.workspace = true
+prost-types.workspace = true
+tauri-plugin.workspace = true
+schemars.workspace = true
+heck.workspace = true
+prettyplease = "0.2.29"
+syn.workspace = true
+quote.workspace = true

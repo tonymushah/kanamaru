@@ -19,7 +19,7 @@ impl<M: Message, S: Stream<Item = Result<IpcMessage<M>, crate::Status>>> Streami
             stream,
         }
     }
-    pub(crate) async fn send_responses<R: Runtime>(
+    pub async fn send_responses<R: Runtime>(
         self,
         webview: Webview<R>,
         event_stream_id: String,
