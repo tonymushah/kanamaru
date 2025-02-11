@@ -1,8 +1,13 @@
+use std::collections::HashSet;
+
 use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
 use syn::Ident;
 
-use crate::utils::{format_method_name, format_method_path, Method, Service};
+use crate::utils::{
+    format_method_name, format_method_path, format_service_name, generate_doc_comments, Method,
+    Service,
+};
 
 pub struct GenerateResponderService<'a, S: Service> {
     pub service: &'a S,
@@ -14,6 +19,7 @@ pub struct GenerateResponderService<'a, S: Service> {
     pub responder_service: Ident,
     pub service_trait: Ident,
     pub attributes: Vec<syn::Attribute>,
+    pub disabled_comments: &'a HashSet<String>,
 }
 
 impl<S: Service> GenerateResponderService<'_, S> {
@@ -244,7 +250,20 @@ impl<S: Service> ToTokens for GenerateResponderService<'_, S> {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let responder_service = &self.responder_service;
         let impl_responder = self.impl_responder();
+
+        let service_name = format_service_name(self.service, self.emit_package);
+
+        let service_doc = if self.disabled_comments.contains(&service_name) {
+            TokenStream::new()
+        } else {
+            generate_doc_comments(self.service.comment())
+        };
+        let struct_attributes = &self.attributes;
+
         let token = quote! {
+            #service_doc
+            #(#struct_attributes)*
+            #[derive(Debug)]
             pub struct #responder_service<T, R> {
                 inner: Arc<T>,
                 cancel: bool,
