@@ -1,4 +1,7 @@
+pub mod builder;
 pub mod codegen;
+
+pub use builder::ProstBuilder;
 
 use proc_macro2::TokenStream;
 use prost_build::{Method as PMethod, Service as PService};
