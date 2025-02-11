@@ -8,12 +8,12 @@ use syn::Ident;
 use crate::utils::generate_doc_comment;
 use crate::utils::{format_method_name, generate_doc_comments, Method, Service};
 
-pub struct GenerateTraitService<'a, S: Service> {
+pub struct GenerateTraitService<'a, S> {
     pub service: &'a S,
     pub emit_package: bool,
     pub proto_path: &'a str,
     pub compile_well_known_types: bool,
-    pub server_trait: Ident,
+    pub service_trait: Ident,
     pub disable_comments: &'a HashSet<String>,
     pub use_arc_self: bool,
     pub generate_default_stubs: bool,
@@ -160,7 +160,7 @@ impl<S: Service> ToTokens for GenerateTraitService<'_, S> {
             " Generated trait containing gRPC methods that should be implemented for use with {}Server.",
             self.service.name()
         ));
-        let server_trait = &self.server_trait;
+        let server_trait = &self.service_trait;
         let _trait = quote! {
             #trait_doc
             #[async_trait]

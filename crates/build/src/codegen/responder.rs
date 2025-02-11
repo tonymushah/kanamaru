@@ -9,7 +9,7 @@ use crate::utils::{
     Service,
 };
 
-pub struct GenerateResponderService<'a, S: Service> {
+pub struct GenerateResponderService<'a, S> {
     pub service: &'a S,
     pub emit_package: bool,
     pub proto_path: &'a str,
