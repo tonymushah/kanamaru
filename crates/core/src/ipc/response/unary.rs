@@ -1,7 +1,7 @@
 use prost::Message;
 use tauri::http::HeaderMap;
 
-use crate::ipc::IpcMessage;
+use crate::ipc::{IpcMessage, IpcMessageBase};
 
 #[derive(Debug, Clone, Default)]
 pub struct UnaryResponse<M: Message> {
@@ -27,5 +27,12 @@ impl<M: Message> From<UnaryResponse<M>> for IpcMessage<M> {
             body: value.body,
             metadata: value.metadata,
         }
+    }
+}
+
+impl<M: Message> From<UnaryResponse<M>> for IpcMessageBase {
+    fn from(value: UnaryResponse<M>) -> Self {
+        let ipc_mess: IpcMessage<M> = value.into();
+        ipc_mess.into()
     }
 }
