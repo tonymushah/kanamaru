@@ -15,7 +15,7 @@ thiserror.workspace = true
 tower.workspace = true
 base64.workspace = true
 tokio-stream = { workspace = true, features = ["sync"] }
-tokio.workspace = true
+tokio = { workspace = true, features = ["macros"] }
 tokio-util.workspace = true
 serde_json.workspace = true
 schemars.workspace = true
