@@ -1,3 +1,5 @@
+pub mod codegen;
+
 use proc_macro2::TokenStream;
 use prost_build::{Method as PMethod, Service as PService};
 use quote::ToTokens;
