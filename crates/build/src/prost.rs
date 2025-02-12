@@ -1,5 +1,6 @@
 pub mod builder;
 pub mod codegen;
+pub mod generator;
 
 pub use builder::ProstBuilder;
 

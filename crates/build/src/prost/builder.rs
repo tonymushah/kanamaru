@@ -1,10 +1,15 @@
 use std::{
     collections::HashSet,
     ffi::OsString,
+    io,
     path::{Path, PathBuf},
 };
 
+use prost_build::Config;
+
 use crate::utils::Attributes;
+
+use super::generator::ServiceGenerator;
 
 pub struct ProstBuilder {
     pub(crate) file_descriptor_set_path: Option<PathBuf>,
@@ -269,5 +274,111 @@ impl ProstBuilder {
     pub fn skip_debug(mut self, path: impl AsRef<str>) -> Self {
         self.skip_debug.insert(path.as_ref().to_string());
         self
+    }
+
+    pub fn setup_config(self, config: &mut Config) {
+        if let Some(out_dir) = self.out_dir.as_ref() {
+            config.out_dir(out_dir);
+        }
+        if let Some(path) = self.file_descriptor_set_path.as_ref() {
+            config.file_descriptor_set_path(path);
+        }
+        if self.skip_protoc_run {
+            config.skip_protoc_run();
+        }
+        for (proto_path, rust_path) in self.extern_path.iter() {
+            config.extern_path(proto_path, rust_path);
+        }
+        for (prost_path, attr) in self.field_attributes.iter() {
+            config.field_attribute(prost_path, attr);
+        }
+        for (prost_path, attr) in self.type_attributes.iter() {
+            config.type_attribute(prost_path, attr);
+        }
+        for (prost_path, attr) in self.message_attributes.iter() {
+            config.message_attribute(prost_path, attr);
+        }
+        for (prost_path, attr) in self.enum_attributes.iter() {
+            config.enum_attribute(prost_path, attr);
+        }
+        for prost_path in self.boxed.iter() {
+            config.boxed(prost_path);
+        }
+        if let Some(ref paths) = self.btree_map {
+            config.btree_map(paths);
+        }
+        if let Some(ref paths) = self.bytes {
+            config.bytes(paths);
+        }
+        if self.compile_well_known_types {
+            config.compile_well_known_types();
+        }
+        if let Some(path) = self.include_file.as_ref() {
+            config.include_file(path);
+        }
+        if !self.skip_debug.is_empty() {
+            config.skip_debug(&self.skip_debug);
+        }
+
+        for arg in self.protoc_args.iter() {
+            config.protoc_arg(arg);
+        }
+
+        config.service_generator(self.service_generator());
+    }
+
+    /// Turn the builder into a `ServiceGenerator` ready to be passed to `prost-build`s
+    /// `Config::service_generator`.
+    pub fn service_generator(self) -> Box<dyn prost_build::ServiceGenerator> {
+        Box::new(ServiceGenerator::new(self))
+    }
+
+    /// Compile the .proto files and execute code generation.
+    pub fn compile_protos(
+        self,
+        protos: &[impl AsRef<Path>],
+        includes: &[impl AsRef<Path>],
+    ) -> io::Result<()> {
+        self.compile_protos_with_config(Config::new(), protos, includes)
+    }
+
+    /// Compile the .proto files and execute code generation using a custom
+    /// `prost_build::Config`. The provided config will be updated with this builder's config.
+    pub fn compile_protos_with_config(
+        self,
+        mut config: Config,
+        protos: &[impl AsRef<Path>],
+        includes: &[impl AsRef<Path>],
+    ) -> io::Result<()> {
+        if self.emit_rerun_if_changed {
+            for path in protos.iter() {
+                println!("cargo:rerun-if-changed={}", path.as_ref().display())
+            }
+
+            for path in includes.iter() {
+                // Cargo will watch the **entire** directory recursively. If we
+                // could figure out which files are imported by our protos we
+                // could specify only those files instead.
+                println!("cargo:rerun-if-changed={}", path.as_ref().display())
+            }
+        }
+
+        self.setup_config(&mut config);
+        config.compile_protos(protos, includes)
+    }
+
+    /// Execute code generation from a file descriptor set.
+    pub fn compile_fds(self, fds: prost_types::FileDescriptorSet) -> io::Result<()> {
+        self.compile_fds_with_config(Config::new(), fds)
+    }
+
+    /// Execute code generation from a file descriptor set using a custom `prost_build::Config`.
+    pub fn compile_fds_with_config(
+        self,
+        mut config: Config,
+        fds: prost_types::FileDescriptorSet,
+    ) -> io::Result<()> {
+        self.setup_config(&mut config);
+        config.compile_fds(fds)
     }
 }
