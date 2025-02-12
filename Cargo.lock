@@ -957,6 +957,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "example-1-plugin"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "kanamaru",
+ "kanamaru-build",
+ "prost",
+ "serde",
+ "serde_json",
+ "tauri",
+]
+
+[[package]]
 name = "fastrand"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1895,9 +1908,7 @@ dependencies = [
  "async-trait",
  "base64 0.22.1",
  "bytes",
- "proc-macro2",
  "prost",
- "prost-build",
  "regex",
  "schemars",
  "serde",
@@ -1907,7 +1918,6 @@ dependencies = [
  "tokio",
  "tokio-stream",
  "tokio-util",
- "tower",
 ]
 
 [[package]]
@@ -2918,10 +2928,6 @@ dependencies = [
  "quote",
  "syn 2.0.96",
 ]
-
-[[package]]
-name = "prost-playground"
-version = "0.1.0"
 
 [[package]]
 name = "prost-types"

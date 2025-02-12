@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-unary"
+description = "Enables the unary command without any pre-configured scope."
+commands.allow = ["unary"]
+
+[[permission]]
+identifier = "deny-unary"
+description = "Denies the unary command without any pre-configured scope."
+commands.deny = ["unary"]

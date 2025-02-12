@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-client-streaming"
+description = "Enables the client_streaming command without any pre-configured scope."
+commands.allow = ["client_streaming"]
+
+[[permission]]
+identifier = "deny-client-streaming"
+description = "Denies the client_streaming command without any pre-configured scope."
+commands.deny = ["client_streaming"]

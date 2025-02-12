@@ -1,0 +1,16 @@
+[package]
+name = "example-1-plugin"
+version = "0.1.0"
+edition = "2021"
+links = "example-1-plugin"
+
+[build-dependencies]
+kanamaru-build.workspace = true
+anyhow.workspace = true
+
+[dependencies]
+kanamaru.workspace = true
+tauri = { workspace = true, default-features = false }
+serde_json.workspace = true
+prost.workspace = true
+serde.workspace = true
