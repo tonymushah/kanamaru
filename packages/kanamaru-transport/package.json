@@ -1,14 +1,27 @@
 {
   "name": "kanamaru-transport",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A toolkit for building Tauri Plugin that enables type-safe IPC through gRpc.",
+  "author": "Jonas Kruckenberg, Tony Mushah",
+  "license": "MIT",
+  "private": false,
+  "repository": "https://github.com/tonymushah/kanamaru",
+  "homepage": "https://github.com/tonymushah/mizuki/tree/main/packages/kanamaru-transport",
+  "bugs": "https://github.com/tonymushah/kanamaru/issues",
+  "keywords": [
+    "tauri",
+    "grpc"
+  ],
+  "browser": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup",
+    "prepublishOnly": "pnpm run build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
