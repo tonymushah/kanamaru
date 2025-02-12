@@ -968,6 +968,8 @@ dependencies = [
  "serde",
  "serde_json",
  "tauri",
+ "tokio",
+ "tokio-stream",
 ]
 
 [[package]]

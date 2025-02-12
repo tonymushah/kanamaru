@@ -15,3 +15,5 @@ serde_json.workspace = true
 prost.workspace = true
 serde.workspace = true
 prost-types = { workspace = true }
+tokio = { workspace = true, features = ["macros"] }
+tokio-stream.workspace = true
