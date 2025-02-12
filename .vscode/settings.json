@@ -52,5 +52,8 @@
         "*.json5": "jsonc"
     },
     "explorerExclude.backup": {},
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "files.watcherExclude": {
+        "**/target": true
+    }
 }
