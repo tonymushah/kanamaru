@@ -7,8 +7,7 @@
     "core:default",
     "opener:default",
     "core:event:default",
-    "core:window:default",
-    "core:webview:default",
+    "core:webview:allow-create-webview-window",
     "example-1-plugin:default"
   ]
 }
