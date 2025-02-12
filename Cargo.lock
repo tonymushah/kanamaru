@@ -949,6 +949,7 @@ dependencies = [
 name = "example-1"
 version = "0.1.0"
 dependencies = [
+ "example-1-plugin",
  "serde",
  "serde_json",
  "tauri",

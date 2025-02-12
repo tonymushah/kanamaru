@@ -22,3 +22,4 @@ tauri = { workspace = true, default-features = true, features = [] }
 tauri-plugin-opener = "2"
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
+example-1-plugin = { path = "../plugin" }
