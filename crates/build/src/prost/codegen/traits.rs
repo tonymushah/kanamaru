@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 
+use heck::ToUpperCamelCase;
 use proc_macro2::TokenStream;
 use quote::quote;
 use quote::ToTokens;
@@ -51,35 +52,37 @@ impl<S: Service> GenerateTraitService<'_, S> {
                 self.generate_default_stubs,
             ) {
                 (true, true, true) => {
-                    let stream = quote::format_ident!("{}Stream", method.identifier());
+                    let stream =
+                        quote::format_ident!("{}Stream", method.identifier().to_upper_camel_case());
                     let stream_doc = generate_doc_comment(format!(
                         " Server streaming response type for the {} method.",
                         method.identifier()
                     ));
                     quote! {
                         #stream_doc
-                        type #stream = kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<#res_message, kanamaru::Status>> + std::marker::Send + 'static;
+                        type #stream: kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<IpcMessage<#res_message>, kanamaru::Status>> + std::marker::Send + 'static;
 
                         #method_doc
                         async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
-                            -> std::result::Result<kanamaru::StreamingResponse<Self::#stream>, kanamaru::Status> {
+                            -> std::result::Result<kanamaru::StreamingResponse<#res_message, Self::#stream>, kanamaru::Status> {
                             #not_implemented
                         }
                     }
                 }
                 (true, true, false) => {
-                    let stream = quote::format_ident!("{}Stream", method.identifier());
+                    let stream =
+                        quote::format_ident!("{}Stream", method.identifier().to_upper_camel_case());
                     let stream_doc = generate_doc_comment(format!(
                         " Server streaming response type for the {} method.",
                         method.identifier()
                     ));
                     quote! {
                         #stream_doc
-                        type #stream = kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<#res_message, kanamaru::Status>> + std::marker::Send + 'static;
+                        type #stream: kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<IpcMessage<#res_message>, kanamaru::Status>> + std::marker::Send + 'static;
 
                         #method_doc
                         async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
-                            -> std::result::Result<kanamaru::StreamingResponse<Self::#stream>, kanamaru::Status>;
+                            -> std::result::Result<kanamaru::StreamingResponse<#res_message, Self::#stream>, kanamaru::Status>;
                     }
                 }
                 (true, false, true) => {
@@ -99,35 +102,37 @@ impl<S: Service> GenerateTraitService<'_, S> {
                     }
                 }
                 (false, true, true) => {
-                    let stream = quote::format_ident!("{}Stream", method.identifier());
+                    let stream =
+                        quote::format_ident!("{}Stream", method.identifier().to_upper_camel_case());
                     let stream_doc = generate_doc_comment(format!(
                         " Server streaming response type for the {} method.",
                         method.identifier()
                     ));
                     quote! {
                         #stream_doc
-                        type #stream = kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<#res_message, kanamaru::Status>> + std::marker::Send + 'static;
+                        type #stream: kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<IpcMessage<#res_message>, kanamaru::Status>> + std::marker::Send + 'static;
 
                         #method_doc
                         async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
-                            -> std::result::Result<kanamaru::StreamingResponse<Self::#stream>, kanamaru::Status> {
+                            -> std::result::Result<kanamaru::StreamingResponse<#res_message, Self::#stream>, kanamaru::Status> {
                             #not_implemented
                         }
                     }
                 }
                 (false, true, false) => {
-                    let stream = quote::format_ident!("{}Stream", method.identifier());
+                    let stream =
+                        quote::format_ident!("{}Stream", method.identifier().to_upper_camel_case());
                     let stream_doc = generate_doc_comment(format!(
                         " Server streaming response type for the {} method.",
                         method.identifier()
                     ));
                     quote! {
                         #stream_doc
-                        type #stream = kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<#res_message, kanamaru::Status>> + std::marker::Send + 'static;
+                        type #stream: kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<IpcMessage<#res_message>, kanamaru::Status>> + std::marker::Send + 'static;
 
                         #method_doc
                         async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
-                            -> std::result::Result<kanamaru::StreamingResponse<Self::#stream>, kanamaru::Status>;
+                            -> std::result::Result<kanamaru::StreamingResponse<#res_message, Self::#stream>, kanamaru::Status>;
                     }
                 }
                 (false, false, true) => {

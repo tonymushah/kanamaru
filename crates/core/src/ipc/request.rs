@@ -20,7 +20,7 @@ pub struct RawRequest {
     pub cancel_token_event_id: String,
     pub payload: Option<IpcMessageBase>,
     pub client_streaming_event_id: Option<String>,
-    pub server_streaming_evente_id: Option<String>,
+    pub server_streaming_event_id: Option<String>,
 }
 
 impl RawRequest {

@@ -86,12 +86,14 @@ impl<S: Service> GenerateResponderService<'_, S> {
         let resp = match (method.client_streaming(), method.server_streaming()) {
             (true, true) => {
                 quote! {
+                    let webview = webview.clone();
                     let request: StreamingRequest<R, #request> = StreamingRequest::new(wv_cancel_token.clone(), message.clone())
                         .map_err(Status::internal)?;
+                    let event_stream_id = message.server_streaming_event_id.clone().ok_or(Status::invalid_argument("`server_streaming_event_id` field is not found"))?;
                     let handle = spawn(async move {
                         let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
-                        res.send_responses().await.map_err(Status::internal)?;
-                        Ok::<(), Status>()
+                        resp.send_responses(webview, event_stream_id).await.map_err(Status::internal)?;
+                        Ok::<(), Status>(())
                     });
                     if cancel {
                         let cancel_token = wv_cancel_token.token();
@@ -101,19 +103,14 @@ impl<S: Service> GenerateResponderService<'_, S> {
                                 Err(Status::aborted("Aborted task").into())
                             },
                             res = handle => {
-                                if let Err(err) = res.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
-                                    Err(err.into())
-                                }else{
-                                    Ok(None::<IpcMessageBase>)
-                                }
+                                res.map_err(Status::internal).and_then(|maybe_res| maybe_res)?;
+                                Ok(None::<IpcMessageBase>)
                             }
                         }
-                    }else {
-                        if let Err(err) = handle.await.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
-                            Err(err.into())
-                        }else{
-                            Ok(None::<IpcMessageBase>)
-                        }
+                    } else if let Err(err) = handle.await.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
+                        Err(err.into())
+                    } else {
+                        Ok(None::<IpcMessageBase>)
                     }
                 }
             }
@@ -143,12 +140,14 @@ impl<S: Service> GenerateResponderService<'_, S> {
             }
             (false, true) => {
                 quote! {
+                    let webview = webview.clone();
                     let request: UnaryRequest<R, #request> = UnaryRequest::new(wv_cancel_token.clone(), message.clone())
                         .map_err(Status::internal)?;
+                    let event_stream_id = message.server_streaming_event_id.clone().ok_or(Status::invalid_argument("`server_streaming_event_id` field is not found"))?;
                     let handle = spawn(async move {
                         let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
-                        res.send_responses().await.map_err(Status::internal)?;
-                        Ok::<(), Status>()
+                        resp.send_responses(webview, event_stream_id).await.map_err(Status::internal)?;
+                        Ok::<(), Status>(())
                     });
                     if cancel {
                         let cancel_token = wv_cancel_token.token();
@@ -158,19 +157,14 @@ impl<S: Service> GenerateResponderService<'_, S> {
                                 Err(Status::aborted("Aborted task").into())
                             },
                             res = handle => {
-                                if let Err(err) = res.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
-                                    Err(err.into())
-                                }else{
-                                    Ok(None::<IpcMessageBase>)
-                                }
+                                res.map_err(Status::internal).and_then(|maybe_res| maybe_res)?;
+                                Ok(None::<IpcMessageBase>)
                             }
                         }
-                    }else {
-                        if let Err(err) = handle.await.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
-                            Err(err.into())
-                        }else{
-                            Ok(None::<IpcMessageBase>)
-                        }
+                    } else if let Err(err) = handle.await.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
+                        Err(err.into())
+                    } else {
+                        Ok(None::<IpcMessageBase>)
                     }
                 }
             }

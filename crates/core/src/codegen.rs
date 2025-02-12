@@ -1,5 +1,5 @@
 pub use crate::{
-    ipc::{request::RawRequest, IpcMessageBase},
+    ipc::{request::RawRequest, IpcMessage, IpcMessageBase},
     responder::{RPCType, Responder},
     Status, StreamingRequest, StreamingResponse, UnaryRequest, UnaryResponse,
 };
