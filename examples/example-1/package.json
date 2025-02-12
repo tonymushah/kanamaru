@@ -18,18 +18,18 @@
   "dependencies": {
     "@protobuf-ts/runtime": "2",
     "@protobuf-ts/runtime-rpc": "2",
-    "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-opener": "^2"
+    "@tauri-apps/api": "2",
+    "@tauri-apps/plugin-opener": "2"
   },
   "devDependencies": {
-    "@protobuf-ts/plugin": "^2.9.4",
-    "@sveltejs/adapter-static": "^3.0.6",
-    "@sveltejs/kit": "^2.9.0",
-    "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "@protobuf-ts/plugin": "2",
+    "@sveltejs/adapter-static": "^3",
+    "@sveltejs/kit": "2",
+    "@sveltejs/vite-plugin-svelte": "5",
     "@tauri-apps/cli": "^2",
-    "svelte": "^5.0.0",
-    "svelte-check": "^4.0.0",
-    "typescript": "~5.6.2",
-    "vite": "^6.0.3"
+    "svelte": "5",
+    "svelte-check": "4",
+    "typescript": "5",
+    "vite": "6"
   }
 }
