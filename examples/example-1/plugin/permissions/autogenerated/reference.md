@@ -111,4 +111,17 @@ Denies the unary command without any pre-configured scope.
 
 </td>
 </tr>
+
+<tr>
+<td>
+
+`example-1-plugin:default`
+
+</td>
+<td>
+
+The default permission for this plugin
+
+</td>
+</tr>
 </table>

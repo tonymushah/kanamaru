@@ -333,6 +333,11 @@
           "description": "Denies the unary command without any pre-configured scope.",
           "type": "string",
           "const": "deny-unary"
+        },
+        {
+          "description": "The default permission for this plugin",
+          "type": "string",
+          "const": "default"
         }
       ]
     }
