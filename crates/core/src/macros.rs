@@ -42,7 +42,7 @@ macro_rules! include_proto {
 ///
 /// ```rust,ignore
 /// let descriptor_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("my_descriptor.bin")
-/// tonic_build::configure()
+/// kanamaru_build::ProstBuilder::default()
 ///     .file_descriptor_set_path(&descriptor_path)
 ///     .compile_protos(&["proto/reflection.proto"], &["proto/"])?;
 /// ```
