@@ -28,45 +28,44 @@
   }
 </script>
 
-<main class="container">
-  <h1>Welcome to Tauri + Svelte</h1>
+<h1>Welcome to Tauri + Svelte</h1>
 
-  <div class="row">
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo vite" alt="Vite Logo" />
-    </a>
-    <a href="https://tauri.app" target="_blank">
-      <img src="/tauri.svg" class="logo tauri" alt="Tauri Logo" />
-    </a>
-    <a href="https://kit.svelte.dev" target="_blank">
-      <img src="/svelte.svg" class="logo svelte-kit" alt="SvelteKit Logo" />
-    </a>
-  </div>
-  <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
+<div class="row">
+  <a href="https://vitejs.dev" target="_blank">
+    <img src="/vite.svg" class="logo vite" alt="Vite Logo" />
+  </a>
+  <a href="https://tauri.app" target="_blank">
+    <img src="/tauri.svg" class="logo tauri" alt="Tauri Logo" />
+  </a>
+  <a href="https://kit.svelte.dev" target="_blank">
+    <img src="/svelte.svg" class="logo svelte-kit" alt="SvelteKit Logo" />
+  </a>
+</div>
+<p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
 
-  <form class="row" onsubmit={greet}>
-    <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
-    <button type="submit">Greet</button>
-  </form>
-  <p>{greetMsg}</p>
-  <div>
-    <button
-      onclick={async () => {
-        const id = Math.floor(Math.random() * 1000000000);
-        const _new_wv_wd = new WebviewWindow(`main-${id}`);
-        _new_wv_wd.once("tauri://window-created", () => {
-          console.log("created window");
-        });
-        _new_wv_wd.once("tauri://webview-created", () => {
-          console.log("initiated webview");
-        });
-        _new_wv_wd.once("tauri://error", (e) => {
-          console.error(e);
-        });
-      }}>New window</button
-    >
-  </div>
-</main>
+<form class="row" onsubmit={greet}>
+  <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
+  <button type="submit">Greet</button>
+</form>
+<p>{greetMsg}</p>
+<div>
+  <button
+    onclick={async () => {
+      const id = Math.floor(Math.random() * 1000000000);
+      const _new_wv_wd = new WebviewWindow(`main-${id}`);
+      _new_wv_wd.once("tauri://window-created", () => {
+        console.log("created window");
+      });
+      _new_wv_wd.once("tauri://webview-created", () => {
+        console.log("initiated webview");
+      });
+      _new_wv_wd.once("tauri://error", (e) => {
+        console.error(e);
+      });
+    }}>New window</button
+  >
+  <a href="/listen-to-hellos"> listen-to-hellos </a>
+</div>
 
 <style>
   .logo.vite:hover {
@@ -91,15 +90,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
-  }
-
-  .container {
-    margin: 0;
-    padding-top: 10vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
   }
 
   .logo {
