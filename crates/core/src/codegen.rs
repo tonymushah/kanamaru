@@ -5,6 +5,7 @@ pub use crate::{
 };
 pub use async_trait::async_trait;
 pub use serde_json::to_value as to_json;
+pub use std::marker::{PhantomData, Send, Sync};
 pub use std::sync::Arc;
 pub use tauri::{
     ipc::{InvokeError, InvokeResolver},
