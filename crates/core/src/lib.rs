@@ -1,6 +1,7 @@
 #[doc(hidden)]
 pub mod codegen;
 pub mod ipc;
+mod macros;
 pub mod plugin;
 pub mod responder;
 pub mod status;
