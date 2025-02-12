@@ -4,6 +4,8 @@
 import type { RpcTransport } from "@protobuf-ts/runtime-rpc";
 import type { ServiceInfo } from "@protobuf-ts/runtime-rpc";
 import { HelloService } from "./myprotos";
+import type { Empty } from "./commons";
+import type { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
 import { stackIntercept } from "@protobuf-ts/runtime-rpc";
 import type { HelloResponse } from "./myprotos";
 import type { HelloRequest } from "./myprotos";
@@ -17,6 +19,10 @@ export interface IHelloServiceClient {
      * @generated from protobuf rpc: sayHello(mg.tonymushah.kanamaru.example1.HelloRequest) returns (mg.tonymushah.kanamaru.example1.HelloResponse);
      */
     sayHello(input: HelloRequest, options?: RpcOptions): UnaryCall<HelloRequest, HelloResponse>;
+    /**
+     * @generated from protobuf rpc: listenToHellos(mg.tonymushah.kanamaru.Empty) returns (stream mg.tonymushah.kanamaru.example1.HelloResponse);
+     */
+    listenToHellos(input: Empty, options?: RpcOptions): ServerStreamingCall<Empty, HelloResponse>;
 }
 /**
  * @generated from protobuf service mg.tonymushah.kanamaru.example1.HelloService
@@ -33,5 +39,12 @@ export class HelloServiceClient implements IHelloServiceClient, ServiceInfo {
     sayHello(input: HelloRequest, options?: RpcOptions): UnaryCall<HelloRequest, HelloResponse> {
         const method = this.methods[0], opt = this._transport.mergeOptions(options);
         return stackIntercept<HelloRequest, HelloResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * @generated from protobuf rpc: listenToHellos(mg.tonymushah.kanamaru.Empty) returns (stream mg.tonymushah.kanamaru.example1.HelloResponse);
+     */
+    listenToHellos(input: Empty, options?: RpcOptions): ServerStreamingCall<Empty, HelloResponse> {
+        const method = this.methods[1], opt = this._transport.mergeOptions(options);
+        return stackIntercept<Empty, HelloResponse>("serverStreaming", this._transport, method, opt, input);
     }
 }

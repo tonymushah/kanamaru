@@ -10,7 +10,9 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "tauri": "tauri",
-    "proto:plugin1": "protoc --ts_opt server_none --ts_out ./src/lib/protos/plugin1 --proto_path ./plugin/protos ./plugin/protos/myprotos.proto"
+    "proto:plugin1": "protoc --ts_opt server_none --ts_out ./src/lib/protos/plugin1 --proto_path ./plugin/protos ./plugin/protos/myprotos.proto",
+    "proto:commons": "protoc --ts_opt server_none --ts_out ./src/lib/protos/plugin1 --proto_path ./plugin/protos ./plugin/protos/commons.proto",
+    "proto:all": "pnpm proto:plugin1 && pnpm proto:commons"
   },
   "license": "MIT",
   "dependencies": {
