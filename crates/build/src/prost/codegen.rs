@@ -9,7 +9,7 @@ use crate::utils::{format_service_name, naive_snake_case, Attributes, Service};
 pub mod responder;
 pub mod traits;
 
-pub struct CodegenBuilder<'a, S> {
+pub struct CodegenResponderBuilder<'a, S> {
     pub service: &'a S,
     pub emit_package: bool,
     pub proto_path: &'a str,
@@ -20,7 +20,7 @@ pub struct CodegenBuilder<'a, S> {
     pub disabled_comments: &'a HashSet<String>,
 }
 
-impl<S: Service> ToTokens for CodegenBuilder<'_, S> {
+impl<S: Service> ToTokens for CodegenResponderBuilder<'_, S> {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let service_responder = quote::format_ident!("{}Responder", self.service.name());
         let service_trait = quote::format_ident!("{}", self.service.name());
