@@ -5,7 +5,7 @@ use super::{
     KanamaruPlugin, OnDrop, OnEvent, OnNavigation, OnPageLoad, OnWebviewReady, OnWindowReady,
     SetupHook,
 };
-use crate::Routes;
+use crate::{Responder, Routes};
 
 /// Errors that can happen during [`Builder`].
 #[derive(Debug, Clone, Hash, PartialEq, thiserror::Error)]
@@ -137,6 +137,12 @@ where
         F: FnMut(Window<R>) + Send + 'static,
     {
         self.on_window_ready = Box::new(on_window_ready);
+        self
+    }
+
+    /// Add a responder to the plugin
+    pub fn add_route(mut self, responder: impl Responder<R> + Send + Sync + 'static) -> Self {
+        self.routes = self.routes.add_responder(responder);
         self
     }
     /// Build the [`crate::KanamaruPlugin`]
