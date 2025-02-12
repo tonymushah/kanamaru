@@ -155,6 +155,7 @@ pub(crate) fn generate_attributes<'a>(
         .collect::<Vec<_>>()
 }
 
+#[allow(dead_code)]
 pub(crate) fn generate_deprecated() -> TokenStream {
     let mut deprecated_stream = TokenStream::new();
     deprecated_stream.append(Ident::new("deprecated", Span::call_site()));
