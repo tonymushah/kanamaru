@@ -246,6 +246,21 @@ impl<S: Service> GenerateResponderService<'_, S> {
             }
         }
     }
+    fn impl_sync_send(&self) -> TokenStream {
+        let responder_service = &self.responder_service;
+        let service_trait = &self.service_trait;
+        quote! {
+            unsafe impl<T, R> Send for #responder_service<T, R>
+                where
+                    T: #service_trait,
+            {}
+
+            unsafe impl<T, R> Sync for #responder_service<T, R>
+                where
+                    T: #service_trait,
+            {}
+        }
+    }
 }
 
 impl<S: Service> ToTokens for GenerateResponderService<'_, S> {
@@ -261,6 +276,8 @@ impl<S: Service> ToTokens for GenerateResponderService<'_, S> {
             generate_doc_comments(self.service.comment())
         };
         let struct_attributes = &self.attributes;
+
+        let impl_sync_send = self.impl_sync_send();
 
         let token = quote! {
             #service_doc
@@ -287,6 +304,8 @@ impl<S: Service> ToTokens for GenerateResponderService<'_, S> {
                     self
                 }
             }
+
+            #impl_sync_send
 
             #impl_responder
         };
