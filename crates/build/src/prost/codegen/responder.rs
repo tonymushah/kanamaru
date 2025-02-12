@@ -129,7 +129,7 @@ impl<S: Service> GenerateResponderService<'_, S> {
                             _ = cancel_token.cancelled() => {
                                 Err(Status::aborted("Aborted task").into())
                             },
-                            res = handle {
+                            res = handle => {
                                 Ok(Some(res.map_err(Status::internal).and_then(|maybe_res| maybe_res)?.into()))
                             }
                         }
