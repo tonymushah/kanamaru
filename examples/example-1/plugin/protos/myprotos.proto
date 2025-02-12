@@ -15,4 +15,6 @@ message HelloResponse {
 service HelloService {
     rpc sayHello(HelloRequest) returns (HelloResponse);
     rpc listenToHellos(mg.tonymushah.kanamaru.Empty) returns (stream HelloResponse);
+    rpc sayHellos(stream HelloRequest) returns (mg.tonymushah.kanamaru.Empty);
+    rpc sayHelloWithResponses(stream HelloRequest) returns (stream HelloResponse);
 }
