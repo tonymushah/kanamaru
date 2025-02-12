@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package mg.tonymushah.kanamaru.example1;
 
+import "commons.proto";
+
 message HelloRequest {
     string name = 1;
 }
@@ -12,4 +14,5 @@ message HelloResponse {
 
 service HelloService {
     rpc sayHello(HelloRequest) returns (HelloResponse);
+    rpc listenToHellos(mg.tonymushah.kanamaru.Empty) returns (stream HelloResponse);
 }

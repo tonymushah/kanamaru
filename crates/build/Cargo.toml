@@ -8,6 +8,7 @@ edition = "2021"
 proc-macro2 = { workspace = true }
 prost-build = { workspace = true, optional = true }
 prost = { workspace = true, optional = true }
+heck = { workspace = true, optional = true }
 prost-types = { workspace = true, optional = true }
 tauri-plugin = { workspace = true, features = ["build"], optional = true }
 schemars = { workspace = true, optional = true }
@@ -18,5 +19,5 @@ serde = { workspace = true }
 
 [features]
 default = ["prost", "tauri"]
-prost = ["dep:prost-build", "dep:prost", "dep:prost-types"]
+prost = ["dep:prost-build", "dep:prost", "dep:prost-types", "dep:heck"]
 tauri = ["dep:tauri-plugin", "dep:schemars"]

@@ -964,6 +964,7 @@ dependencies = [
  "kanamaru",
  "kanamaru-build",
  "prost",
+ "prost-types",
  "serde",
  "serde_json",
  "tauri",
@@ -1924,6 +1925,7 @@ dependencies = [
 name = "kanamaru-build"
 version = "0.1.0"
 dependencies = [
+ "heck 0.5.0",
  "prettyplease",
  "proc-macro2",
  "prost",
