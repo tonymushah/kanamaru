@@ -24,6 +24,20 @@ where
     label: String,
 }
 
+unsafe impl<L, R> Send for EventListnerStream<L, R>
+where
+    L: Listener<R> + Send,
+    R: Runtime,
+{
+}
+
+unsafe impl<L, R> Sync for EventListnerStream<L, R>
+where
+    L: Listener<R> + Sync,
+    R: Runtime,
+{
+}
+
 impl<L, R> Drop for EventListnerStream<L, R>
 where
     L: Listener<R>,

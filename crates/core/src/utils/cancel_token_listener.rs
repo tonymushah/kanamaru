@@ -15,6 +15,20 @@ where
     runtime: PhantomData<R>,
 }
 
+unsafe impl<L, R> Send for CancellationTokenListener<L, R>
+where
+    L: Listener<R> + Send,
+    R: Runtime,
+{
+}
+
+unsafe impl<L, R> Sync for CancellationTokenListener<L, R>
+where
+    L: Listener<R> + Sync,
+    R: Runtime,
+{
+}
+
 impl<L, R> Drop for CancellationTokenListener<L, R>
 where
     L: Listener<R>,
