@@ -35,8 +35,6 @@ export function isMessage(param: unknown): param is IpcMessageBase {
         param !== null &&
         "metadata" in param &&
         typeof (param as any).metadata === "object" &&
-        Object.prototype.toString.call((param as any).metadata) ===
-        "[object Object]" &&
         (typeof (param as any).body === "string" ||
             (param as any).body === null ||
             typeof (param as any).body === "undefined")
@@ -66,4 +64,9 @@ export function convertGrpcMeta(meta: RpcMetadata): Record<string, string> {
         }
     }
     return Object.fromEntries(map.entries());
+}
+
+export type ServerStreamingResponse = {
+    Ok?: IpcMessageBase,
+    Err?: KanamaruStatus
 }

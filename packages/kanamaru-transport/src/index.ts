@@ -19,7 +19,7 @@ import { getCurrentWebview } from "@tauri-apps/api/webview";
 import "core-js/actual/typed-array/from-base64";
 import "core-js/actual/typed-array/to-base64";
 import { Code } from "./status-code";
-import { convertGrpcMeta, IpcMessageBase, isMessage, isStatus, KanamaruStatus, RawReqwest } from "./commons";
+import { convertGrpcMeta, IpcMessageBase, isMessage, isStatus, KanamaruStatus, RawReqwest, ServerStreamingResponse } from "./commons";
 import ClientStreamingStreamController from "./client-stream-controller";
 
 declare global {
@@ -192,6 +192,8 @@ export class KanamaruTransport implements RpcTransport {
 				defTrailer.promise
 			);
 
+
+
 		const appWebview = getCurrentWebview();
 
 		const cancel_token_event_id = generate_event_id();
@@ -208,12 +210,11 @@ export class KanamaruTransport implements RpcTransport {
 			);
 		}
 
-		const stream_listener = appWebview.listen<
-			IpcMessageBase | KanamaruStatus | null
-		>(server_streaming_event_id, (ev) => {
+		const stream_listener = appWebview.listen<ServerStreamingResponse | null>(server_streaming_event_id, (ev) => {
 			if (ev.payload != null) {
-				const payload = ev.payload;
-				if (isStatus(payload)) {
+				const _payload = ev.payload;
+				if (_payload.Err != undefined) {
+					const payload = _payload.Err;
 					const e = new RpcError(
 						payload.message,
 						Code[payload.code],
@@ -228,7 +229,8 @@ export class KanamaruTransport implements RpcTransport {
 					defStatus.rejectPending(e);
 					defTrailer.rejectPending(e);
 					cancel();
-				} else if (isMessage(payload)) {
+				} else if (_payload.Ok != undefined) {
+					const payload = _payload.Ok;
 					if (payload.body != null && payload.body != undefined) {
 						outStream.notifyMessage(
 							method.O.fromBinary(Uint8Array.fromBase64(payload.body))
@@ -463,12 +465,11 @@ export class KanamaruTransport implements RpcTransport {
 			);
 		}
 
-		const stream_listener = appWebview.listen<
-			IpcMessageBase | KanamaruStatus | null
-		>(server_streaming_event_id, (ev) => {
+		const stream_listener = appWebview.listen<ServerStreamingResponse | null>(server_streaming_event_id, (ev) => {
 			if (ev.payload != null) {
-				const payload = ev.payload;
-				if (isStatus(payload)) {
+				const _payload = ev.payload;
+				if (_payload.Err != undefined) {
+					const payload = _payload.Err;
 					const e = new RpcError(
 						payload.message,
 						Code[payload.code],
@@ -483,7 +484,8 @@ export class KanamaruTransport implements RpcTransport {
 					defStatus.rejectPending(e);
 					defTrailer.rejectPending(e);
 					cancel();
-				} else if (isMessage(payload)) {
+				} else if (_payload.Ok != undefined) {
+					const payload = _payload.Ok;
 					if (payload.body != null && payload.body != undefined) {
 						outStream.notifyMessage(
 							method.O.fromBinary(Uint8Array.fromBase64(payload.body))
