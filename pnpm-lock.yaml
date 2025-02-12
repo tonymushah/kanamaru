@@ -26,6 +26,9 @@ importers:
       '@tauri-apps/plugin-opener':
         specifier: '2'
         version: 2.2.5
+      kanamaru-transport:
+        specifier: path:../../../../packages/kanamaru-transport
+        version: link:../../packages/kanamaru-transport
     devDependencies:
       '@protobuf-ts/plugin':
         specifier: '2'

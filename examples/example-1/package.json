@@ -19,7 +19,8 @@
     "@protobuf-ts/runtime": "2",
     "@protobuf-ts/runtime-rpc": "2",
     "@tauri-apps/api": "2",
-    "@tauri-apps/plugin-opener": "2"
+    "@tauri-apps/plugin-opener": "2",
+    "kanamaru-transport": "path:../../../../packages/kanamaru-transport"
   },
   "devDependencies": {
     "@protobuf-ts/plugin": "2",
