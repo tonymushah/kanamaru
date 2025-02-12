@@ -1,29 +1,47 @@
-use std::sync::Arc;
+use std::{fmt::Debug, sync::Arc};
 
 use prost::Message;
 use serde::Deserialize;
 use tauri::{
     http::HeaderMap,
-    ipc::{InvokeBody, InvokeMessage},
+    ipc::{Channel, InvokeBody, InvokeMessage},
     Runtime, Webview,
 };
 
-use crate::utils::{
-    event_listener_stream::message::EventListnerMessagesStream, CancellationTokenListener,
-    EventListnerStream,
+use crate::{
+    utils::{
+        event_listener_stream::message::EventListnerMessagesStream, CancellationTokenListener,
+        EventListnerStream,
+    },
+    Status,
 };
 
 use super::{InvokeMessageToRequestError, RawRequest, RawRequestToRequestError, RequestBase};
 
-#[derive(Debug)]
 pub struct StreamingRequest<R, M>
 where
     R: Runtime,
     M: Message + Default,
 {
     metadata: HeaderMap,
+    channel_status: Channel<Status>,
     stream: EventListnerMessagesStream<Webview<R>, R, M>,
     cancel_token: Arc<CancellationTokenListener<Webview<R>, R>>,
+}
+
+impl<R, M> Debug for StreamingRequest<R, M>
+where
+    R: Runtime,
+    M: Message + Default,
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("SteamingRequest")
+            .field("metadata", &self.metadata)
+            .field("channel_status", &())
+            .field("stream", &self.stream)
+            .field("cancel_token", &self.cancel_token)
+            .finish()
+    }
 }
 
 impl<R, M> StreamingRequest<R, M>
@@ -37,6 +55,7 @@ where
     ) -> Result<Self, RawRequestToRequestError> {
         if let Some(client_stream_id) = raw.client_streaming_event_id {
             Ok(Self {
+                channel_status: raw.status_channel.channel_on(token.listener().clone()),
                 metadata: raw.payload.map(|e| e.metadata).unwrap_or_default(),
                 stream: EventListnerStream::new(token.listener().clone(), client_stream_id)
                     .into_message_stream(),
@@ -83,5 +102,8 @@ where
 {
     fn token(&self) -> Arc<CancellationTokenListener<Webview<R>, R>> {
         self.cancel_token.clone()
+    }
+    fn status_channel(&self) -> Channel<crate::Status> {
+        self.channel_status.clone()
     }
 }

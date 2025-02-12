@@ -4,23 +4,49 @@ pub mod unary;
 pub use streaming::StreamingRequest;
 pub use unary::UnaryRequest;
 
-use std::sync::Arc;
+use std::{fmt::Debug, sync::Arc};
 
 use serde::Deserialize;
-use tauri::{ipc::InvokeMessage, AppHandle, Listener, Manager, Runtime, Webview};
+use tauri::{
+    ipc::{Channel, InvokeMessage, JavaScriptChannelId},
+    AppHandle, Listener, Manager, Runtime, Webview,
+};
 use tokio_util::sync::CancellationToken;
 
-use crate::utils::CancellationTokenListener;
+use crate::{utils::CancellationTokenListener, Status};
 
 use super::{IpcBodyExtractMessageError, IpcMessageBase};
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct RawRequest {
     pub route: String,
     pub cancel_token_event_id: String,
     pub payload: Option<IpcMessageBase>,
     pub client_streaming_event_id: Option<String>,
     pub server_streaming_event_id: Option<String>,
+    pub status_channel: Arc<JavaScriptChannelId>,
+}
+
+impl Debug for RawRequest {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        #[derive(Debug)]
+        #[allow(dead_code)]
+        struct RawRequestDbg<'a> {
+            route: &'a String,
+            cancel_token_event_id: &'a String,
+            payload: Option<&'a IpcMessageBase>,
+            client_streaming_event_id: Option<&'a String>,
+            server_streaming_event_id: Option<&'a String>,
+        }
+        RawRequestDbg {
+            route: &self.route,
+            cancel_token_event_id: &self.cancel_token_event_id,
+            payload: self.payload.as_ref(),
+            client_streaming_event_id: self.client_streaming_event_id.as_ref(),
+            server_streaming_event_id: self.server_streaming_event_id.as_ref(),
+        }
+        .fmt(f)
+    }
 }
 
 impl RawRequest {
@@ -65,4 +91,5 @@ pub trait RequestBase<R: Runtime>:
     fn app_handle(&self) -> AppHandle<R> {
         self.webview().app_handle().clone()
     }
+    fn status_channel(&self) -> Channel<Status>;
 }

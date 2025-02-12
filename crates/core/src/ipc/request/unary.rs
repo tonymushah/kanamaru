@@ -1,18 +1,18 @@
-use std::sync::Arc;
+use std::{fmt::Debug, sync::Arc};
 
 use prost::Message;
 use serde::Deserialize;
 use tauri::{
     http::HeaderMap,
-    ipc::{InvokeBody, InvokeMessage},
+    ipc::{Channel, InvokeBody, InvokeMessage},
     Runtime, Webview,
 };
 
-use crate::utils::CancellationTokenListener;
+use crate::{utils::CancellationTokenListener, Status};
 
 use super::{InvokeMessageToRequestError, RawRequest, RawRequestToRequestError, RequestBase};
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct UnaryRequest<R, M>
 where
     M: Message + Clone + Default,
@@ -20,7 +20,19 @@ where
 {
     token: Arc<CancellationTokenListener<Webview<R>, R>>,
     message: M,
+    channel_status: Channel<Status>,
     headers: HeaderMap,
+}
+
+impl<R: Runtime, M: Message + Clone + Default> Debug for UnaryRequest<R, M> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("UnaryRequest")
+            .field("token", &self.token)
+            .field("message", &self.message)
+            .field("channel_status", &())
+            .field("headers", &self.headers)
+            .finish()
+    }
 }
 
 impl<R, M> UnaryRequest<R, M>
@@ -34,6 +46,9 @@ where
     ) -> Result<Self, RawRequestToRequestError> {
         if let Some(payload) = raw_reqwest.payload {
             Ok(Self {
+                channel_status: raw_reqwest
+                    .status_channel
+                    .channel_on(token.listener().clone()),
                 token,
                 message: payload.extract_message()?,
                 headers: payload.metadata,
@@ -93,5 +108,8 @@ where
 {
     fn token(&self) -> Arc<CancellationTokenListener<Webview<R>, R>> {
         self.token.clone()
+    }
+    fn status_channel(&self) -> tauri::ipc::Channel<crate::Status> {
+        self.channel_status.clone()
     }
 }
