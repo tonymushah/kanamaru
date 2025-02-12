@@ -1,7 +1,10 @@
 pub mod protos;
 
+use std::pin::Pin;
+
 use kanamaru::{
-    ipc::IpcMessage, RequestBase, Status, StreamingResponse, UnaryRequest, UnaryResponse,
+    ipc::IpcMessage, RequestBase, Status, StreamingRequest, StreamingResponse, UnaryRequest,
+    UnaryResponse,
 };
 use protos::{
     example1::{
@@ -12,7 +15,7 @@ use protos::{
 };
 use tauri::Runtime;
 use tokio::sync::watch::Sender;
-use tokio_stream::{wrappers::WatchStream, StreamExt};
+use tokio_stream::{wrappers::WatchStream, Stream, StreamExt};
 
 pub struct HelloServiceInternal {
     event_sender: Sender<String>,
@@ -20,7 +23,6 @@ pub struct HelloServiceInternal {
 
 #[kanamaru::async_trait]
 impl HelloService for HelloServiceInternal {
-    type ListenToHellosStream = WatchStream<Result<IpcMessage<HelloResponse>, Status>>;
     async fn say_hello<R: Runtime>(
         &self,
         request: UnaryRequest<R, HelloRequest>,
@@ -29,6 +31,8 @@ impl HelloService for HelloServiceInternal {
         let _ = self.event_sender.send_replace(resp.clone());
         Ok(UnaryResponse::new(HelloResponse { response: resp }))
     }
+
+    type ListenToHellosStream = WatchStream<Result<IpcMessage<HelloResponse>, Status>>;
     async fn listen_to_hellos<R: Runtime>(
         &self,
         request: UnaryRequest<R, Empty>,
@@ -57,6 +61,23 @@ impl HelloService for HelloServiceInternal {
         });
 
         Ok(StreamingResponse::new(WatchStream::from_changes(recv)))
+    }
+    async fn say_hellos<R: Runtime>(
+        &self,
+        request: StreamingRequest<R, HelloRequest>,
+    ) -> Result<UnaryResponse<Empty>, Status> {
+        Err(Status::unimplemented("Not yet implemented"))
+    }
+
+    type SayHelloWithResponsesStream = Pin<
+        Box<dyn Stream<Item = Result<IpcMessage<HelloResponse>, Status>> + Send + Sync + 'static>,
+    >;
+
+    async fn say_hello_with_responses<R: Runtime>(
+        &self,
+        request: StreamingRequest<R, HelloRequest>,
+    ) -> Result<StreamingResponse<HelloResponse, Self::SayHelloWithResponsesStream>, Status> {
+        Err(Status::unimplemented("Not yet implemented"))
     }
 }
 
