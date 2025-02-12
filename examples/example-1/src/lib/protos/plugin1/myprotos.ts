@@ -129,5 +129,7 @@ export const HelloResponse = new HelloResponse$Type();
  */
 export const HelloService = new ServiceType("mg.tonymushah.kanamaru.example1.HelloService", [
     { name: "sayHello", options: {}, I: HelloRequest, O: HelloResponse },
-    { name: "listenToHellos", serverStreaming: true, options: {}, I: Empty, O: HelloResponse }
+    { name: "listenToHellos", serverStreaming: true, options: {}, I: Empty, O: HelloResponse },
+    { name: "sayHellos", clientStreaming: true, options: {}, I: HelloRequest, O: Empty },
+    { name: "sayHelloWithResponses", serverStreaming: true, clientStreaming: true, options: {}, I: HelloRequest, O: HelloResponse }
 ]);

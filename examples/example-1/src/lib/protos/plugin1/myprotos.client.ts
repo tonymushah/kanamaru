@@ -4,6 +4,8 @@
 import type { RpcTransport } from "@protobuf-ts/runtime-rpc";
 import type { ServiceInfo } from "@protobuf-ts/runtime-rpc";
 import { HelloService } from "./myprotos";
+import type { DuplexStreamingCall } from "@protobuf-ts/runtime-rpc";
+import type { ClientStreamingCall } from "@protobuf-ts/runtime-rpc";
 import type { Empty } from "./commons";
 import type { ServerStreamingCall } from "@protobuf-ts/runtime-rpc";
 import { stackIntercept } from "@protobuf-ts/runtime-rpc";
@@ -23,6 +25,14 @@ export interface IHelloServiceClient {
      * @generated from protobuf rpc: listenToHellos(mg.tonymushah.kanamaru.Empty) returns (stream mg.tonymushah.kanamaru.example1.HelloResponse);
      */
     listenToHellos(input: Empty, options?: RpcOptions): ServerStreamingCall<Empty, HelloResponse>;
+    /**
+     * @generated from protobuf rpc: sayHellos(stream mg.tonymushah.kanamaru.example1.HelloRequest) returns (mg.tonymushah.kanamaru.Empty);
+     */
+    sayHellos(options?: RpcOptions): ClientStreamingCall<HelloRequest, Empty>;
+    /**
+     * @generated from protobuf rpc: sayHelloWithResponses(stream mg.tonymushah.kanamaru.example1.HelloRequest) returns (stream mg.tonymushah.kanamaru.example1.HelloResponse);
+     */
+    sayHelloWithResponses(options?: RpcOptions): DuplexStreamingCall<HelloRequest, HelloResponse>;
 }
 /**
  * @generated from protobuf service mg.tonymushah.kanamaru.example1.HelloService
@@ -46,5 +56,19 @@ export class HelloServiceClient implements IHelloServiceClient, ServiceInfo {
     listenToHellos(input: Empty, options?: RpcOptions): ServerStreamingCall<Empty, HelloResponse> {
         const method = this.methods[1], opt = this._transport.mergeOptions(options);
         return stackIntercept<Empty, HelloResponse>("serverStreaming", this._transport, method, opt, input);
+    }
+    /**
+     * @generated from protobuf rpc: sayHellos(stream mg.tonymushah.kanamaru.example1.HelloRequest) returns (mg.tonymushah.kanamaru.Empty);
+     */
+    sayHellos(options?: RpcOptions): ClientStreamingCall<HelloRequest, Empty> {
+        const method = this.methods[2], opt = this._transport.mergeOptions(options);
+        return stackIntercept<HelloRequest, Empty>("clientStreaming", this._transport, method, opt);
+    }
+    /**
+     * @generated from protobuf rpc: sayHelloWithResponses(stream mg.tonymushah.kanamaru.example1.HelloRequest) returns (stream mg.tonymushah.kanamaru.example1.HelloResponse);
+     */
+    sayHelloWithResponses(options?: RpcOptions): DuplexStreamingCall<HelloRequest, HelloResponse> {
+        const method = this.methods[3], opt = this._transport.mergeOptions(options);
+        return stackIntercept<HelloRequest, HelloResponse>("duplex", this._transport, method, opt);
     }
 }
