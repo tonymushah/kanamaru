@@ -2,7 +2,7 @@
   "name": "kanamaru-transport",
   "version": "1.0.0",
   "description": "A toolkit for building Tauri Plugin that enables type-safe IPC through gRpc.",
-  "author": "Jonas Kruckenberg, Tony Mushah",
+  "author": "Tony Mushah",
   "license": "MIT",
   "private": false,
   "repository": "https://github.com/tonymushah/kanamaru",
