@@ -1,3 +1,11 @@
+## Default Permission
+
+The default permission for this plugin
+
+- `allow-client-streaming`
+- `allow-duplex`
+- `allow-server-streaming`
+- `allow-unary`
 
 ## Permission Table
 
@@ -108,19 +116,6 @@ Enables the unary command without any pre-configured scope.
 <td>
 
 Denies the unary command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`example-1-plugin:default`
-
-</td>
-<td>
-
-The default permission for this plugin
 
 </td>
 </tr>
