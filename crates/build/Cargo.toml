@@ -4,14 +4,18 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-proc-macro2.workspace = true
-prost-build.workspace = true
-prost.workspace = true
-prost-types.workspace = true
-tauri-plugin.workspace = true
-schemars.workspace = true
-heck.workspace = true
-prettyplease = "0.2.29"
-syn.workspace = true
-quote.workspace = true
-serde.workspace = true
+proc-macro2 = { workspace = true }
+prost-build = { workspace = true, optional = true }
+prost = { workspace = true, optional = true }
+prost-types = { workspace = true, optional = true }
+tauri-plugin = { workspace = true, features = ["build"], optional = true }
+schemars = { workspace = true, optional = true }
+prettyplease = { version = "0.2" }
+syn = { workspace = true }
+quote = { workspace = true }
+serde = { workspace = true }
+
+[features]
+default = ["prost", "tauri"]
+prost = ["dep:prost-build", "dep:prost", "dep:prost-types"]
+tauri = ["dep:tauri-plugin", "dep:schemars"]

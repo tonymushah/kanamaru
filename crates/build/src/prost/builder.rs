@@ -37,6 +37,35 @@ pub struct ProstBuilder {
     out_dir: Option<PathBuf>,
 }
 
+impl Default for ProstBuilder {
+    fn default() -> Self {
+        Self {
+            file_descriptor_set_path: None,
+            skip_protoc_run: false,
+            out_dir: None,
+            extern_path: Vec::new(),
+            field_attributes: Vec::new(),
+            message_attributes: Vec::new(),
+            enum_attributes: Vec::new(),
+            type_attributes: Vec::new(),
+            boxed: Vec::new(),
+            btree_map: None,
+            bytes: None,
+            proto_path: "super".to_string(),
+            compile_well_known_types: false,
+            emit_package: true,
+            protoc_args: Vec::new(),
+            include_file: None,
+            emit_rerun_if_changed: std::env::var_os("CARGO").is_some(),
+            disable_comments: HashSet::default(),
+            use_arc_self: false,
+            generate_default_stubs: false,
+            skip_debug: HashSet::default(),
+            responder_attributes: Attributes::default(),
+        }
+    }
+}
+
 impl ProstBuilder {
     /// Generate a file containing the encoded `prost_types::FileDescriptorSet` for protocol buffers
     /// modules. This is required for implementing gRPC Server Reflection.
@@ -381,4 +410,24 @@ impl ProstBuilder {
         self.setup_config(&mut config);
         config.compile_fds(fds)
     }
+}
+
+/// Simple `.proto` compiling. Use [`ProstBuilder::default`] instead if you need more options.
+///
+/// The include directory will be the parent folder of the specified path.
+/// The package name will be the filename without the extension.
+pub fn compile_protos(proto: impl AsRef<Path>) -> io::Result<()> {
+    let proto_path: &Path = proto.as_ref();
+
+    // directory the main .proto file resides in
+    let proto_dir = proto_path
+        .parent()
+        .expect("proto file should reside in a directory");
+
+    ProstBuilder::default().compile_protos(&[proto_path], &[proto_dir])
+}
+
+/// Simple file descriptor set compiling. Use [`ProstBuilder::default`] instead if you need more options.
+pub fn compile_fds(fds: prost_types::FileDescriptorSet) -> io::Result<()> {
+    ProstBuilder::default().compile_fds(fds)
 }
