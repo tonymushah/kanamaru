@@ -1,0 +1,11 @@
+"$schema" = "schemas/schema.json"
+
+[[set]]
+identifier = "default"
+description = "The default permission for this plugin"
+permissions = [
+    "allow-client-streaming",
+    "allow-duplex",
+    "allow-server-streaming",
+    "allow-unary",
+]
