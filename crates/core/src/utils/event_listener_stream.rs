@@ -1,15 +1,11 @@
 // TODO Use `tokio_util` Reusable Box for future cause the stream will hang on forever
 pub mod message;
 
-use std::{
-    future::Future,
-    marker::PhantomData,
-    task::{ready, Poll},
-};
+use std::marker::PhantomData;
 
 use tauri::{EventId, Listener, Runtime};
-use tokio::sync::watch::{self, Receiver};
-use tokio_stream::Stream;
+use tokio::sync::watch::{self};
+use tokio_stream::{wrappers::WatchStream, Stream, StreamExt};
 
 #[derive(Debug)]
 pub struct EventListnerStream<L, R>
@@ -20,8 +16,8 @@ where
     listener: L,
     runtime: PhantomData<R>,
     event_id: EventId,
-    receiver: Receiver<Option<String>>,
     label: String,
+    stream: WatchStream<Option<String>>,
 }
 
 unsafe impl<L, R> Send for EventListnerStream<L, R>
@@ -60,10 +56,10 @@ where
             tx.send_replace(Some(event.payload().into()));
         });
         Self {
+            stream: WatchStream::new(rx.clone()),
             listener,
             runtime: PhantomData::<R>,
             event_id,
-            receiver: rx,
             label,
         }
     }
@@ -101,17 +97,8 @@ where
         mut self: std::pin::Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,
     ) -> std::task::Poll<Option<Self::Item>> {
-        let mut fut = Box::pin(self.receiver.changed());
-        if ready!(fut.as_mut().poll(cx)).is_ok() {
-            drop(fut);
-            if let Some(data) = self.receiver.borrow().as_ref() {
-                Poll::Ready(Some(data.clone()))
-            } else {
-                cx.waker().wake_by_ref();
-                Poll::Pending
-            }
-        } else {
-            Poll::Ready(None)
-        }
+        let mut inner = (&mut self.stream).filter_map(|v| v);
+        let mut stream = Box::pin(&mut inner);
+        stream.as_mut().poll_next(cx)
     }
 }
