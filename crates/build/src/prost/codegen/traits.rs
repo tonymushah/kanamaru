@@ -162,7 +162,7 @@ impl<S: Service> ToTokens for GenerateTraitService<'_, S> {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let methods = self.generate_methods();
         let trait_doc = generate_doc_comment(format!(
-            " Generated trait containing gRPC methods that should be implemented for use with {}Server.",
+            " Generated trait containing gRPC methods that should be implemented for use with {}Responder.",
             self.service.name()
         ));
         let server_trait = &self.service_trait;
