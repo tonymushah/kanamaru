@@ -24,10 +24,10 @@ pub struct GenerateResponderService<'a, S> {
 
 impl<S: Service> GenerateResponderService<'_, S> {
     fn impl_service_name(&self) -> TokenStream {
-        let name = self.service.name().to_string();
+        let name = format_service_name(self.service, self.emit_package);
         quote! {
             fn service_name(&self) -> String {
-                #name
+                #name.into()
             }
         }
     }
@@ -71,143 +71,150 @@ impl<S: Service> GenerateResponderService<'_, S> {
             }
         }
     }
-    fn impl_respond(&self) -> TokenStream {
+    fn impl_respond_method(&self, method: &S::Method) -> TokenStream {
         let inner_arg = if self.use_arc_self {
             quote!(inner)
         } else {
             quote!(&inner)
         };
         let service_trait = &self.service_trait;
+        let method_name = quote::format_ident!("{}", method.name());
+        let name_method = format_method_name(self.service, method, self.emit_package);
+        let path_method = format_method_path(self.service, method, self.emit_package);
+        let (request, response) =
+            method.request_response_name(self.proto_path, self.compile_well_known_types);
+        let resp = match (method.client_streaming(), method.server_streaming()) {
+            (true, true) => {
+                quote! {
+                    let request: StreamingRequest<R, #request> = StreamingRequest::new(wv_cancel_token.clone(), message.clone())
+                        .map_err(Status::internal)?;
+                    let handle = spawn(async move {
+                        let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
+                        res.send_responses().await.map_err(Status::internal)?;
+                        Ok::<(), Status>()
+                    });
+                    if cancel {
+                        let cancel_token = wv_cancel_token.token();
+                        let _abort = handle.abort_handle();
+                        select! {
+                            _ = cancel_token.cancelled() => {
+                                Err(Status::aborted("Aborted task").into())
+                            },
+                            res = handle => {
+                                if let Err(err) = res.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
+                                    Err(err.into())
+                                }else{
+                                    Ok(None::<IpcMessageBase>)
+                                }
+                            }
+                        }
+                    }else {
+                        if let Err(err) = handle.await.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
+                            Err(err.into())
+                        }else{
+                            Ok(None::<IpcMessageBase>)
+                        }
+                    }
+                }
+            }
+            (true, false) => {
+                quote! {
+                    let request: StreamingRequest<R, #request> = StreamingRequest::new(wv_cancel_token.clone(), message.clone())
+                        .map_err(Status::internal)?;
+                    let handle = spawn(async move {
+                        let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
+                        Ok::<UnaryResponse<#response>, Status>(resp)
+                    });
+                    if cancel {
+                        let cancel_token = wv_cancel_token.token();
+                        let _abort = handle.abort_handle();
+                        select! {
+                            _ = cancel_token.cancelled() => {
+                                Err(Status::aborted("Aborted task").into())
+                            },
+                            res = handle {
+                                Ok(Some(res.map_err(Status::internal).and_then(|maybe_res| maybe_res)?.into()))
+                            }
+                        }
+                    }else {
+                        Ok(Some(handle.await.map_err(Status::internal).and_then(|maybe_res| maybe_res)?.into()))
+                    }
+                }
+            }
+            (false, true) => {
+                quote! {
+                    let request: UnaryRequest<R, #request> = UnaryRequest::new(wv_cancel_token.clone(), message.clone())
+                        .map_err(Status::internal)?;
+                    let handle = spawn(async move {
+                        let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
+                        res.send_responses().await.map_err(Status::internal)?;
+                        Ok::<(), Status>()
+                    });
+                    if cancel {
+                        let cancel_token = wv_cancel_token.token();
+                        let _abort = handle.abort_handle();
+                        select! {
+                            _ = cancel_token.cancelled() => {
+                                Err(Status::aborted("Aborted task").into())
+                            },
+                            res = handle => {
+                                if let Err(err) = res.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
+                                    Err(err.into())
+                                }else{
+                                    Ok(None::<IpcMessageBase>)
+                                }
+                            }
+                        }
+                    }else {
+                        if let Err(err) = handle.await.map_err(Status::internal).and_then(|maybe_res| maybe_res) {
+                            Err(err.into())
+                        }else{
+                            Ok(None::<IpcMessageBase>)
+                        }
+                    }
+                }
+            }
+            (false, false) => {
+                quote! {
+                    let request: UnaryRequest<R, #request> = UnaryRequest::new(wv_cancel_token.clone(), message.clone())
+                        .map_err(Status::internal)?;
+                    let handle = spawn(async move {
+                        let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
+                        Ok::<UnaryResponse<#response>, Status>(resp)
+                    });
+                    if cancel {
+                        let cancel_token = wv_cancel_token.token();
+                        let _abort = handle.abort_handle();
+                        let res = select! {
+                            _ = cancel_token.cancelled() => {
+                                Err(Status::aborted("Aborted task").into())
+                            },
+                            res = handle => {
+                                Ok(Some(res.map_err(Status::internal).and_then(|maybe_res| maybe_res)?.into()))
+                            }
+                        };
+                        res
+                    }else {
+                        Ok(Some(handle.await.map_err(Status::internal).and_then(|maybe_res| maybe_res)?.into()))
+                    }
+                }
+            }
+        };
+        quote! {
+            #name_method => {
+                #resp
+            },
+            #path_method => {
+                #resp
+            },
+        }
+    }
+    fn impl_respond(&self) -> TokenStream {
         let methods = self
             .service
             .methods()
             .iter()
-            .map(|method| {
-                let method_name = quote::format_ident!("{}", method.name());
-                let name_method = format_method_name(self.service, method, self.emit_package);
-                let path_method = format_method_path(self.service, method, self.emit_package);
-                let (request, response) = method.request_response_name(self.proto_path, self.compile_well_known_types);
-                let resp = match (method.client_streaming(), method.server_streaming()) {
-                    (true, true) => {
-                        quote! {
-                            let request: StreamingRequest<R, _> = StreamingRequest<R, #request>::new(wv_cancel_token.clone(), message.clone());
-                            let mut handle = spawn(async move {
-                                let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
-                                res.send_responses().await.map_err(|err| Status::internal(err))?;
-                                Ok::<(), Status>()
-                            });
-                            if cancel {
-                                let cancel_token = wv_cancel_token.token();
-                                let _abort = handle.abort_handle();
-                                select! {
-                                    _ = cancel_token.cancelled() => {
-                                        Err(Status::aborted("Aborted task"))
-                                    },
-                                    res = &mut task {
-                                        if let Err(err) = res.map_err(|err| Status::internal(res)).and_then(|maybe_res| maybe_res) {
-                                            Err(err.into())
-                                        }else{
-                                            Ok(None::<IpcMessageBase>)
-                                        }
-                                    }
-                                }
-                            }else {
-                                if let Err(err) = task.await.map_err(|err| Status::internal(res)).and_then(|maybe_res| maybe_res) {
-                                    Err(err.into())
-                                }else{
-                                    Ok(None::<IpcMessageBase>)
-                                }
-                            }
-                        }
-                    },
-                    (true, false) => {
-                        quote! {
-                            let request: StreamingRequest<R, _> = StreamingRequest<R, #request>::new(wv_cancel_token.clone(), message.clone());
-                            let mut handle = spawn(async move {
-                                let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
-                                Ok::<#response, Status>(resp)
-                            });
-                            if cancel {
-                                let cancel_token = wv_cancel_token.token();
-                                let _abort = handle.abort_handle();
-                                select! {
-                                    _ = cancel_token.cancelled() => {
-                                        Err(Status::aborted("Aborted task"))
-                                    },
-                                    res = &mut task {
-                                        Ok(res.map_err(|err| Status::internal(res)).and_then(|maybe_res| maybe_res)?)
-                                    }
-                                }
-                            }else {
-                                Ok(res.map_err(|err| Status::internal(res)).and_then(|maybe_res| maybe_res)?)
-                            }
-                        }
-                    },
-                    (false, true) => quote! {
-                        quote! {
-                            let request: UnaryRequest<R, _> = UnaryRequest<R, #request>::new(wv_cancel_token.clone(), message.clone());
-                            let mut handle = spawn(async move {
-                                let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
-                                res.send_responses().await.map_err(|err| Status::internal(err))?;
-                                Ok::<(), Status>()
-                            });
-                            if cancel {
-                                let cancel_token = wv_cancel_token.token();
-                                let _abort = handle.abort_handle();
-                                select! {
-                                    _ = cancel_token.cancelled() => {
-                                        Err(Status::aborted("Aborted task"))
-                                    },
-                                    res = &mut task {
-                                        if let Err(err) = res.map_err(|err| Status::internal(res)).and_then(|maybe_res| maybe_res) {
-                                            Err(err.into())
-                                        }else{
-                                            Ok(None::<IpcMessageBase>)
-                                        }
-                                    }
-                                }
-                            }else {
-                                if let Err(err) = task.await.map_err(|err| Status::internal(res)).and_then(|maybe_res| maybe_res) {
-                                    Err(err.into())
-                                }else{
-                                    Ok(None::<IpcMessageBase>)
-                                }
-                            }
-                        }
-                    },
-                    (false, false) => quote! {
-                        quote! {
-                            let request: UnaryRequest<R, _> = UnaryRequest<R, #request>::new(wv_cancel_token.clone(), message.clone());
-                            let mut handle = spawn(async move {
-                                let resp = <T as #service_trait>::#method_name(#inner_arg, request).await?;
-                                Ok::<#response, Status>(resp)
-                            });
-                            if cancel {
-                                let cancel_token = wv_cancel_token.token();
-                                let _abort = handle.abort_handle();
-                                select! {
-                                    _ = cancel_token.cancelled() => {
-                                        Err(Status::aborted("Aborted task"))
-                                    },
-                                    res = &mut task {
-                                        Ok(res.map_err(|err| Status::internal(res)).and_then(|maybe_res| maybe_res)?)
-                                    }
-                                }
-                            }else {
-                                Ok(res.map_err(|err| Status::internal(res)).and_then(|maybe_res| maybe_res)?)
-                            }
-                        }
-                    },
-                };
-                quote! {
-                    #name_method => {
-                        #resp
-                    },
-                    #path_method => {
-                        #resp
-                    },
-                }
-            })
+            .map(|method| self.impl_respond_method(method))
             .reduce(|mut acc, t| {
                 acc.extend(t);
                 acc
@@ -218,11 +225,12 @@ impl<S: Service> GenerateResponderService<'_, S> {
                 let cancel = self.cancel;
                 let wv_cancel_token = Arc::new(message.cancel_token(webview.clone()));
                 resovler.respond_async::<Option<IpcMessageBase>, _>(async move {
-                    match &message.route {
+                    let route = message.route.as_str();
+                    match route {
                         #methods
                         _ => Err(Status::not_found(format!("this route {} is not found", message.route)).into())
                     }
-                })
+                });
             }
         }
     }
@@ -233,7 +241,7 @@ impl<S: Service> GenerateResponderService<'_, S> {
         let service_name = self.impl_service_name();
         let respond = self.impl_respond();
         quote! {
-            impl<T, R> Responder<R> for #responder_service<T>
+            impl<T, R> Responder<R> for #responder_service<T, R>
                 where
                     T: #service_trait,
                     R: Runtime
@@ -273,17 +281,19 @@ impl<S: Service> ToTokens for GenerateResponderService<'_, S> {
                 pub fn from_arc(inner: Arc<T>) -> Self {
                     Self {
                         inner,
-                        cancel: true
+                        cancel: true,
+                        runtime: PhantomData::<R>
                     }
                 }
                 pub fn new(inner: T) -> Self {
-                    Self::from_arc(Arc::new(T))
+                    Self::from_arc(Arc::new(inner))
                 }
                 pub fn cancel(mut self, cancel: bool) -> Self {
                     self.cancel = cancel;
                     self
                 }
             }
+
             #impl_responder
         };
         tokens.extend(token);
