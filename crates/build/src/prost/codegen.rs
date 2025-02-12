@@ -65,7 +65,7 @@ impl<S: Service> ToTokens for CodegenResponderBuilder<'_, S> {
                     missing_docs,
                     clippy::wildcard_imports
                 )]
-                use tonic::codegen::*;
+                use kanamaru::codegen::*;
 
                 #_trait
 
