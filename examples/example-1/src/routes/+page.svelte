@@ -47,7 +47,9 @@
   <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
   <button type="submit">Greet</button>
 </form>
+
 <p>{greetMsg}</p>
+
 <div>
   <button
     onclick={async () => {
@@ -64,7 +66,11 @@
       });
     }}>New window</button
   >
+</div>
+
+<div>
   <a href="/listen-to-hellos"> listen-to-hellos </a>
+  <a href="/hello-batch"> hello-batch </a>
 </div>
 
 <style>
