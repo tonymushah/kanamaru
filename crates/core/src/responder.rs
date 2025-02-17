@@ -40,9 +40,11 @@ impl<R: Runtime> Default for Routes<R> {
 }
 
 impl<R: Runtime> Routes<R> {
+    pub fn insert_responder(&mut self, responder: impl Responder<R> + Send + Sync + 'static) {
+        self.0.insert(responder.service_name(), Arc::new(Box::new(responder)));
+    }
     pub fn add_responder(mut self, responder: impl Responder<R> + Send + Sync + 'static) -> Self {
-        self.0
-            .insert(responder.service_name(), Arc::new(Box::new(responder)));
+        self.insert_responder(responder);
         self
     }
     pub fn respond(&self, message: RawRequest, webview: Webview<R>, resovler: InvokeResolver<R>) {

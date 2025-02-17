@@ -73,7 +73,7 @@ where
     #[must_use]
     pub fn setup<F>(mut self, setup: F) -> Self
     where
-        F: FnOnce(&AppHandle<R>, JsonValue, &Routes<R>) -> Result<(), Box<dyn std::error::Error>>
+        F: FnOnce(&AppHandle<R>, JsonValue, &mut Routes<R>) -> Result<(), Box<dyn std::error::Error>>
             + Send
             + 'static,
     {

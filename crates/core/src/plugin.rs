@@ -16,7 +16,7 @@ use tauri::{
 
 use crate::{ipc::request::RawRequest, Routes, Status};
 
-pub(crate) type SetupHook<R> = dyn FnOnce(&AppHandle<R>, JsonValue, &Routes<R>) -> Result<(), Box<dyn std::error::Error>>
+pub(crate) type SetupHook<R> = dyn FnOnce(&AppHandle<R>, JsonValue, &mut Routes<R>) -> Result<(), Box<dyn std::error::Error>>
     + Send;
 pub(crate) type OnWebviewReady<R> = dyn FnMut(Webview<R>) + Send;
 pub(crate) type OnEvent<R> = dyn FnMut(&AppHandle<R>, &RunEvent) + Send;
@@ -55,7 +55,7 @@ where
         let _ = config;
         self.app.replace(app.clone());
         if let Some(s) = self.setup.take() {
-            (s)(app, config, &self.routes)?;
+            (s)(app, config, &mut self.routes)?;
         }
         Ok(())
     }
