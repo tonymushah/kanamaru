@@ -74,6 +74,9 @@ where
     pub fn stream(self) -> EventListnerMessagesStream<Webview<R>, R, M> {
         self.stream
     }
+    pub fn stream_mut(&mut self) -> &mut EventListnerMessagesStream<Webview<R>, R, M> {
+        &mut self.stream
+    }
 }
 
 impl<R, M> TryFrom<&InvokeMessage<R>> for StreamingRequest<R, M>
