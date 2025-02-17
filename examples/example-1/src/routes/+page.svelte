@@ -64,12 +64,15 @@
       _new_wv_wd.once("tauri://error", (e) => {
         console.error(e);
       });
-    }}>New window</button
+    }}
   >
+    New window
+  </button>
 </div>
 
 <div>
   <a href="/listen-to-hellos"> listen-to-hellos </a>
+  <br />
   <a href="/hello-batch"> hello-batch </a>
 </div>
 

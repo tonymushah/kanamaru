@@ -20,7 +20,8 @@
     "@protobuf-ts/runtime-rpc": "2",
     "@tauri-apps/api": "2",
     "@tauri-apps/plugin-opener": "2",
-    "kanamaru-transport": "path:../../../../packages/kanamaru-transport"
+    "kanamaru-transport": "path:../../../../packages/kanamaru-transport",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@protobuf-ts/plugin": "2",
@@ -28,6 +29,7 @@
     "@sveltejs/kit": "2",
     "@sveltejs/vite-plugin-svelte": "5",
     "@tauri-apps/cli": "^2",
+    "@types/lodash": "^4.17.15",
     "svelte": "5",
     "svelte-check": "4",
     "typescript": "5",
