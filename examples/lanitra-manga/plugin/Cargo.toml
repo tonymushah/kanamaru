@@ -19,3 +19,7 @@ tokio = { workspace = true, features = ["macros"] }
 tokio-stream.workspace = true
 async-stream = "0.3.6"
 bsky-sdk = "0.1.16"
+reqwest = { workspace = true }
+atrium-api = "0.25.0"
+time = "0.3.37"
+chrono = "0.4.39"
