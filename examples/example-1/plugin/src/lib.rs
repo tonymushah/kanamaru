@@ -1,7 +1,8 @@
 pub mod protos;
 
-use std::pin::Pin;
+use std::{pin::Pin, time::Duration};
 
+use async_stream::try_stream;
 use kanamaru::{
     ipc::IpcMessage, RequestBase, Status, StreamingRequest, StreamingResponse, UnaryRequest,
     UnaryResponse,
@@ -64,9 +65,15 @@ impl HelloService for HelloServiceInternal {
     }
     async fn say_hellos<R: Runtime>(
         &self,
-        request: StreamingRequest<R, HelloRequest>,
+        mut request: StreamingRequest<R, HelloRequest>,
     ) -> Result<UnaryResponse<Empty>, Status> {
-        Err(Status::unimplemented("Not yet implemented"))
+        while let Some(data) = request.stream_mut().next().await {
+            let resp = format!("Hello {}!", data?.body.name);
+            let _ = self.event_sender.send_replace(resp.clone());
+            tokio::time::sleep(Duration::from_secs(2)).await;
+        }
+        println!("finished stream!!");
+        Ok(UnaryResponse::new(Empty {}))
     }
 
     type SayHelloWithResponsesStream = Pin<
@@ -75,9 +82,23 @@ impl HelloService for HelloServiceInternal {
 
     async fn say_hello_with_responses<R: Runtime>(
         &self,
-        request: StreamingRequest<R, HelloRequest>,
+        mut request: StreamingRequest<R, HelloRequest>,
     ) -> Result<StreamingResponse<HelloResponse, Self::SayHelloWithResponsesStream>, Status> {
-        Err(Status::unimplemented("Not yet implemented"))
+        let sender = self.event_sender.clone();
+
+        let stream = try_stream! {
+            while let Some(data) = request.stream_mut().next().await {
+                let data = data?;
+                let resp = format!("Hello {}!", data.body.name);
+                let _ = sender.send_replace(resp.clone());
+                yield IpcMessage::new(HelloResponse { response: resp });
+                tokio::time::sleep(Duration::from_secs(2)).await;
+            }
+        };
+
+        Ok(StreamingResponse::new(
+            Box::pin(stream) as Self::SayHelloWithResponsesStream
+        ))
     }
 }
 
