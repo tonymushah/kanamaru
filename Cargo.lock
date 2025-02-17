@@ -2322,6 +2322,7 @@ dependencies = [
  "anyhow",
  "async-stream",
  "atrium-api",
+ "atrium-xrpc-client",
  "bsky-sdk",
  "chrono",
  "kanamaru",
