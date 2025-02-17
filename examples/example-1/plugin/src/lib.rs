@@ -1,6 +1,6 @@
 pub mod protos;
 
-use std::{pin::Pin, time::Duration};
+use std::pin::Pin;
 
 use async_stream::try_stream;
 use kanamaru::{
@@ -70,7 +70,6 @@ impl HelloService for HelloServiceInternal {
         while let Some(data) = request.stream_mut().next().await {
             let resp = format!("Hello {}!", data?.body.name);
             let _ = self.event_sender.send_replace(resp.clone());
-            tokio::time::sleep(Duration::from_secs(2)).await;
         }
         println!("finished stream!!");
         Ok(UnaryResponse::new(Empty {}))
@@ -92,7 +91,6 @@ impl HelloService for HelloServiceInternal {
                 let resp = format!("Hello {}!", data.body.name);
                 let _ = sender.send_replace(resp.clone());
                 yield IpcMessage::new(HelloResponse { response: resp });
-                tokio::time::sleep(Duration::from_secs(2)).await;
             }
         };
 
