@@ -3,9 +3,12 @@ name = "lanitra-manga-rpc"
 version = "0.1.0"
 edition = "2021"
 authors.workspace = true
+links = "lanitra-manga"
 
 [build-dependencies]
-kanamaru-build.workspace = true
+kanamaru-build = { workspace = true, default-features = false, features = [
+    "tauri",
+] }
 anyhow.workspace = true
 
 [dependencies]
@@ -23,4 +26,6 @@ reqwest = { workspace = true }
 atrium-api = "0.25.0"
 time = "0.3.37"
 chrono = "0.4.39"
-atrium-xrpc-client = { version = "0.5.11", default-features = false, features = ["reqwest"] }
+atrium-xrpc-client = { version = "0.5.11", default-features = false, features = [
+    "reqwest",
+] }

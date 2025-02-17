@@ -5,7 +5,7 @@ edition = "2021"
 links = "example-1-plugin"
 
 [build-dependencies]
-kanamaru-build.workspace = true
+kanamaru-build = { workspace = true, default-features = true }
 anyhow.workspace = true
 
 [dependencies]

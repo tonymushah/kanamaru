@@ -6,7 +6,7 @@ pub mod prost;
 pub mod tauri;
 pub mod utils;
 
-#[cfg(feature = "prost")]
+#[cfg(feature = "tauri")]
 pub use tauri::{build as plugin_build, get_tauri_plugin_builder};
 
 #[cfg(feature = "prost")]

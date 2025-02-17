@@ -1,3 +1,8 @@
 {
-  "svelte.enable-ts-plugin": true
+  "svelte.enable-ts-plugin": true,
+  "protoc": {
+    "options": [
+      "--proto_path=./plugin/protos"
+    ]
+  }
 }

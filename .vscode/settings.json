@@ -5,6 +5,11 @@
         "tauri.conf.json5": "tauri",
         "Tauri.toml": "tauri"
     },
+    "protoc": {
+        "options": [
+            "--proto_path={workspaceRoot}/examples/lanitra-manga/protos"
+        ]
+    },
     "[javascript]": {
         "editor.maxTokenizationLineLength": 2500,
         "editor.formatOnSave": true
@@ -55,5 +60,5 @@
     "git.ignoreLimitWarning": true,
     "files.watcherExclude": {
         "**/target": true
-    }
+    },
 }
