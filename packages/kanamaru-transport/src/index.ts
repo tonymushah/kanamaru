@@ -19,7 +19,7 @@ import { getCurrentWebview } from "@tauri-apps/api/webview";
 import "core-js/actual/typed-array/from-base64";
 import "core-js/actual/typed-array/to-base64";
 import { Code } from "./status-code";
-import { convertGrpcMeta, IpcMessageBase, isMessage, isStatus, KanamaruStatus, RawReqwest, ServerStreamingResponse } from "./commons";
+import { convertGrpcMeta, IpcMessageBase, isMessage, isStatus, KanamaruStatus, RawReqwest, ServerStreamingResponse, generate_event_id } from "./commons";
 import ClientStreamingStreamController from "./client-stream-controller";
 import invokeCall, { InvokeType } from "./invoke";
 
@@ -41,9 +41,6 @@ declare global {
 	}
 }
 
-function generate_event_id(): string {
-	return `${Math.floor(Math.random() * 10000000)}`;
-}
 
 export class KanamaruTransport implements RpcTransport {
 	private readonly defaultOptions: RpcOptions;

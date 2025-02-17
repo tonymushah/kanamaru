@@ -70,3 +70,7 @@ export type ServerStreamingResponse = {
     Ok?: IpcMessageBase,
     Err?: KanamaruStatus
 }
+
+export function generate_event_id(): string {
+    return `${Math.floor(Math.random() * 10000000)}`;
+}
