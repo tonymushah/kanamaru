@@ -1,0 +1,21 @@
+[package]
+name = "lanitra-manga-rpc"
+version = "0.1.0"
+edition = "2021"
+authors.workspace = true
+
+[build-dependencies]
+kanamaru-build.workspace = true
+anyhow.workspace = true
+
+[dependencies]
+kanamaru.workspace = true
+tauri = { workspace = true, default-features = false }
+serde_json.workspace = true
+prost.workspace = true
+serde.workspace = true
+prost-types = { workspace = true }
+tokio = { workspace = true, features = ["macros"] }
+tokio-stream.workspace = true
+async-stream = "0.3.6"
+bsky-sdk = "0.1.16"

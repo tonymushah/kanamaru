@@ -29,6 +29,7 @@ schemars = "0.8"
 kanamaru = { path = "./crates/core" }
 kanamaru-build = { path = "./crates/build" }
 anyhow = "1"
+tauri-build = "2"
 
 [workspace.package]
 authors = ["tonymushah <tonymushahDev06@yahoo.com>"]
