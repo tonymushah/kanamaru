@@ -19,9 +19,12 @@ import { getCurrentWebview } from "@tauri-apps/api/webview";
 import "core-js/actual/typed-array/from-base64";
 import "core-js/actual/typed-array/to-base64";
 import { Code } from "./status-code";
-import { convertGrpcMeta, IpcMessageBase, isMessage, isStatus, KanamaruStatus, RawReqwest, ServerStreamingResponse, generate_event_id } from "./commons";
+import { convertGrpcMeta, IpcMessageBase, isMessage, isStatus, KanamaruStatus, RawReqwest, ServerStreamingResponse, generate_event_id, DeferredFunction } from "./commons";
 import ClientStreamingStreamController from "./client-stream-controller";
 import invokeCall, { InvokeType } from "./invoke";
+import make_cancel from "./make_cancel";
+import { UnlistenFn } from "@tauri-apps/api/event";
+import make_server_streaming from "./make_server_streaming";
 
 declare global {
 	interface Uint8ArrayConstructor {
@@ -84,22 +87,10 @@ export class KanamaruTransport implements RpcTransport {
 			);
 		const appWebview = getCurrentWebview();
 
-		const cancel_token_event_id = generate_event_id();
-
-		const cancel_fn = () => {
-			appWebview.emitTo(
-				{
-					kind: "Webview",
-					label: appWebview.label,
-				},
-				cancel_token_event_id
-			);
-		};
-
-		window.addEventListener("unload", cancel_fn);
-		if (opt.abort) {
-			opt.abort.addEventListener("abort", cancel_fn);
-		}
+		const { unlistenAll, cancel_token_event_id } = make_cancel({
+			appWebview,
+			abortSignal: opt.abort
+		})
 
 		const invokeArgs: RawReqwest = {
 			route: `${method.service.typeName}/${method.name}`,
@@ -160,10 +151,7 @@ export class KanamaruTransport implements RpcTransport {
 				defTrailer.rejectPending(error);
 			})
 			.finally(() => {
-				window.removeEventListener("unload", cancel_fn);
-				if (opt.abort) {
-					opt.abort.removeEventListener("abort", cancel_fn);
-				}
+				unlistenAll()
 			});
 		return call;
 	}
@@ -177,79 +165,34 @@ export class KanamaruTransport implements RpcTransport {
 		const opt = this.mergeOptions(options),
 			meta = opt.meta ?? {},
 			defHeader = new Deferred<RpcMetadata>(),
-			outStream = new RpcOutputStreamController<O>(),
 			defStatus = new Deferred<RpcStatus>(),
-			defTrailer = new Deferred<RpcMetadata>(),
-			call = new ServerStreamingCall<I, O>(
-				method,
-				meta,
-				input,
-				defHeader.promise,
-				outStream,
-				defStatus.promise,
-				defTrailer.promise
-			);
-
-
+			defTrailer = new Deferred<RpcMetadata>();
 
 		const appWebview = getCurrentWebview();
 
-		const cancel_token_event_id = generate_event_id();
+		const cancel = new DeferredFunction<UnlistenFn>();
+		const stream_unlistener = new DeferredFunction<UnlistenFn>();
 
-		const server_streaming_event_id = generate_event_id();
-
-		function cancel() {
-			appWebview.emitTo(
-				{
-					kind: "Webview",
-					label: appWebview.label,
-				},
-				cancel_token_event_id
-			);
-		}
-
-		const stream_listener = appWebview.listen<ServerStreamingResponse | null>(server_streaming_event_id, (ev) => {
-			if (ev.payload != null) {
-				const _payload = ev.payload;
-				if (_payload.Err != undefined) {
-					const payload = _payload.Err;
-					const e = new RpcError(
-						payload.message,
-						Code[payload.code],
-						payload.metadata
-					);
-					e.methodName = method.name;
-					e.serviceName = method.service.typeName;
-					defHeader.rejectPending(e);
-					if (!outStream.closed) {
-						outStream.notifyError(e);
-					}
-					defStatus.rejectPending(e);
-					defTrailer.rejectPending(e);
-					cancel();
-				} else if (_payload.Ok != undefined) {
-					const payload = _payload.Ok;
-					if (payload.body != null && payload.body != undefined) {
-						outStream.notifyMessage(
-							method.O.fromBinary(Uint8Array.fromBase64(payload.body))
-						);
-					} else {
-						outStream.notifyMessage(method.O.create());
-					}
-				}
+		const { cancel_token_event_id, cancel_fn, unlistenAll } = make_cancel({
+			appWebview,
+			abortSignal: opt.abort,
+			other: () => {
+				stream_unlistener.call([]);
 			}
 		});
+		cancel.func = cancel_fn;
 
-		const unlisten_stream = () => stream_listener.then((f) => f());
-		const cancel_fn = () => {
-			cancel();
-			unlisten_stream();
-		};
-
-		window.addEventListener("unload", cancel_fn);
-		if (opt.abort) {
-			opt.abort.addEventListener("abort", cancel_fn);
-		}
+		const { unlisten, server_streaming_event_id, outStream } = make_server_streaming({
+			appWebview,
+			defHeader,
+			defStatus,
+			defTrailer,
+			method,
+			cancel: () => {
+				cancel.call([])
+			}
+		});
+		stream_unlistener.func = unlisten;
 
 		const invokeArgs: RawReqwest = {
 			route: `${method.service.typeName}/${method.name}`,
@@ -305,14 +248,18 @@ export class KanamaruTransport implements RpcTransport {
 				defTrailer.rejectPending(error);
 			})
 			.finally(() => {
-				window.removeEventListener("unload", cancel_fn);
-				unlisten_stream();
-				if (opt.abort) {
-					opt.abort.removeEventListener("abort", cancel_fn);
-				}
+				unlistenAll()
 			});
 
-		return call;
+		return new ServerStreamingCall<I, O>(
+			method,
+			meta,
+			input,
+			defHeader.promise,
+			outStream,
+			defStatus.promise,
+			defTrailer.promise
+		);
 	}
 
 
@@ -329,26 +276,14 @@ export class KanamaruTransport implements RpcTransport {
 
 		const appWebview = getCurrentWebview();
 
-		const cancel_token_event_id = generate_event_id();
-
 		const client_streaming_event_id = generate_event_id();
 
 		const inStream = new ClientStreamingStreamController(method, appWebview, client_streaming_event_id);
 
-		const cancel_fn = () => {
-			appWebview.emitTo(
-				{
-					kind: "Webview",
-					label: appWebview.label,
-				},
-				cancel_token_event_id
-			);
-		};
-
-		window.addEventListener("unload", cancel_fn);
-		if (opt.abort) {
-			opt.abort.addEventListener("abort", cancel_fn);
-		}
+		const { cancel_token_event_id, unlistenAll } = make_cancel({
+			appWebview,
+			abortSignal: opt.abort
+		})
 
 		const invokeArgs: RawReqwest = {
 			route: `${method.service.typeName}/${method.name}`,
@@ -409,10 +344,7 @@ export class KanamaruTransport implements RpcTransport {
 				defTrailer.rejectPending(error);
 			})
 			.finally(() => {
-				window.removeEventListener("unload", cancel_fn);
-				if (opt.abort) {
-					opt.abort.removeEventListener("abort", cancel_fn);
-				}
+				unlistenAll()
 			});
 
 		return new ClientStreamingCall<I, O>(method, meta, inStream, defHeader.promise, defMessage.promise, defStatus.promise, defTrailer.promise);
@@ -426,71 +358,37 @@ export class KanamaruTransport implements RpcTransport {
 		const opt = this.mergeOptions(options),
 			meta = opt.meta ?? {},
 			defHeader = new Deferred<RpcMetadata>(),
-			outStream = new RpcOutputStreamController<O>(),
 			defStatus = new Deferred<RpcStatus>(),
 			defTrailer = new Deferred<RpcMetadata>();
 		const appWebview = getCurrentWebview();
-
-		const cancel_token_event_id = generate_event_id();
-
-		const server_streaming_event_id = generate_event_id();
 
 		const client_streaming_event_id = generate_event_id();
 
 		const inStream = new ClientStreamingStreamController(method, appWebview, client_streaming_event_id);
 
-		function cancel() {
-			appWebview.emitTo(
-				{
-					kind: "Webview",
-					label: appWebview.label,
-				},
-				cancel_token_event_id
-			);
-		}
+		const cancel = new DeferredFunction<UnlistenFn>();
+		const stream_unlistener = new DeferredFunction<UnlistenFn>();
 
-		const stream_listener = appWebview.listen<ServerStreamingResponse | null>(server_streaming_event_id, (ev) => {
-			if (ev.payload != null) {
-				const _payload = ev.payload;
-				if (_payload.Err != undefined) {
-					const payload = _payload.Err;
-					const e = new RpcError(
-						payload.message,
-						Code[payload.code],
-						payload.metadata
-					);
-					e.methodName = method.name;
-					e.serviceName = method.service.typeName;
-					defHeader.rejectPending(e);
-					if (!outStream.closed) {
-						outStream.notifyError(e);
-					}
-					defStatus.rejectPending(e);
-					defTrailer.rejectPending(e);
-					cancel();
-				} else if (_payload.Ok != undefined) {
-					const payload = _payload.Ok;
-					if (payload.body != null && payload.body != undefined) {
-						outStream.notifyMessage(
-							method.O.fromBinary(Uint8Array.fromBase64(payload.body))
-						);
-					} else {
-						outStream.notifyMessage(method.O.create());
-					}
-				}
+		const { cancel_token_event_id, cancel_fn, unlistenAll } = make_cancel({
+			appWebview,
+			abortSignal: opt.abort,
+			other: () => {
+				stream_unlistener.call([]);
 			}
 		});
+		cancel.func = cancel_fn;
 
-		const unlisten_stream = () => stream_listener.then((f) => f());
-		const cancel_fn = () => {
-			cancel();
-			unlisten_stream();
-		};
-
-		window.addEventListener("unload", cancel_fn);
-		if (opt.abort) {
-			opt.abort.addEventListener("abort", cancel_fn);
-		}
+		const { unlisten, server_streaming_event_id, outStream } = make_server_streaming({
+			appWebview,
+			defHeader,
+			defStatus,
+			defTrailer,
+			method,
+			cancel: () => {
+				cancel.call([])
+			}
+		});
+		stream_unlistener.func = unlisten;
 
 		const invokeArgs: RawReqwest = {
 			route: `${method.service.typeName}/${method.name}`,
@@ -546,11 +444,7 @@ export class KanamaruTransport implements RpcTransport {
 				defTrailer.rejectPending(error);
 			})
 			.finally(() => {
-				window.removeEventListener("unload", cancel_fn);
-				unlisten_stream();
-				if (opt.abort) {
-					opt.abort.removeEventListener("abort", cancel_fn);
-				}
+				unlistenAll()
 			});
 
 		return new DuplexStreamingCall(method, meta, inStream, defHeader.promise, outStream, defStatus.promise, defTrailer.promise)

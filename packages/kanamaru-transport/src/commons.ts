@@ -74,3 +74,18 @@ export type ServerStreamingResponse = {
 export function generate_event_id(): string {
     return `${Math.floor(Math.random() * 10000000)}`;
 }
+
+export class DeferredFunction<F extends (...args: any) => any> {
+    private _func?: F
+    constructor(func?: F) {
+        this._func = func;
+    }
+
+    public set func(v: F) {
+        this._func = v;
+    }
+
+    public call(args: Parameters<F>): ReturnType<F> | undefined {
+        return this._func?.(args)
+    }
+}
