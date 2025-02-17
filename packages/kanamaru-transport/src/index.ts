@@ -21,6 +21,7 @@ import "core-js/actual/typed-array/to-base64";
 import { Code } from "./status-code";
 import { convertGrpcMeta, IpcMessageBase, isMessage, isStatus, KanamaruStatus, RawReqwest, ServerStreamingResponse } from "./commons";
 import ClientStreamingStreamController from "./client-stream-controller";
+import invokeCall, { InvokeType } from "./invoke";
 
 declare global {
 	interface Uint8ArrayConstructor {
@@ -51,6 +52,13 @@ export class KanamaruTransport implements RpcTransport {
 		this.pluginName = pluginName;
 		this.defaultOptions = defaultOptions;
 
+	}
+	invokeCall(type: InvokeType, arg: RawReqwest): Promise<IpcMessageBase | null> {
+		return invokeCall({
+			type,
+			args: arg,
+			pluginName: this.pluginName
+		})
 	}
 	mergeOptions(options?: Partial<RpcOptions>): RpcOptions {
 		return mergeRpcOptions(this.defaultOptions, options);
@@ -114,14 +122,7 @@ export class KanamaruTransport implements RpcTransport {
 			defTrailer.resolvePending(status.metadata);
 		};
 
-		invoke<IpcMessageBase | null>(`plugin:${this.pluginName}|unary`, invokeArgs)
-			.catch((err: string | KanamaruStatus) => {
-				if (typeof err == "string") {
-					throw new RpcError(err, Code[Code.Internal]);
-				} else {
-					throw new RpcError(err.message, Code[err.code], err.metadata);
-				}
-			})
+		this.invokeCall(InvokeType.Unary, invokeArgs)
 			.then((res) => {
 				if (res == null) {
 					throw new RpcError("Invalid response", Code[Code.DataLoss]);
@@ -272,14 +273,7 @@ export class KanamaruTransport implements RpcTransport {
 			defTrailer.resolvePending(status.metadata);
 		};
 
-		invoke(`plugin:${this.pluginName}|server_streaming`, invokeArgs)
-			.catch((err: string | KanamaruStatus) => {
-				if (typeof err == "string") {
-					throw new RpcError(err, Code[Code.Internal]);
-				} else {
-					throw new RpcError(err.message, Code[err.code], err.metadata);
-				}
-			})
+		this.invokeCall(InvokeType.ServerStreaming, invokeArgs)
 			.then(() => {
 				if (!outStream.closed) {
 					outStream.notifyComplete();
@@ -377,14 +371,7 @@ export class KanamaruTransport implements RpcTransport {
 			defTrailer.resolvePending(status.metadata);
 		};
 
-		invoke<IpcMessageBase | null>(`plugin:${this.pluginName}|client_streaming`, invokeArgs)
-			.catch((err: string | KanamaruStatus) => {
-				if (typeof err == "string") {
-					throw new RpcError(err, Code[Code.Internal]);
-				} else {
-					throw new RpcError(err.message, Code[err.code], err.metadata);
-				}
-			})
+		this.invokeCall(InvokeType.ClientStreaming, invokeArgs)
 			.then((res) => {
 				if (res == null) {
 					throw new RpcError("Invalid response", Code[Code.DataLoss]);
@@ -527,14 +514,7 @@ export class KanamaruTransport implements RpcTransport {
 			defTrailer.resolvePending(status.metadata);
 		};
 
-		invoke(`plugin:${this.pluginName}|duplex`, invokeArgs)
-			.catch((err: string | KanamaruStatus) => {
-				if (typeof err == "string") {
-					throw new RpcError(err, Code[Code.Internal]);
-				} else {
-					throw new RpcError(err.message, Code[err.code], err.metadata);
-				}
-			})
+		this.invokeCall(InvokeType.Duplex, invokeArgs)
 			.then(() => {
 				if (!outStream.closed) {
 					outStream.notifyComplete();
