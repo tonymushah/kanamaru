@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package mg.tonymushah.lanitra_manga.feeds;
+
+import "posts/view.proto";
+import "profiles.proto";
+
+message GetTimelineRequest {
+    optional string algorithm = 1;
+    optional string cursor = 2;
+    optional uint32 limit = 3;
+}
+
+message ReasonPin {
+    
+}
+
+message ReasonRepost {
+    mg.tonymushah.lanitra_manga.profiles.ProfileViewBasic by = 1;
+    string indexed_at = 2;
+}
+
+message FeedViewPostReason {
+    oneof reason {
+        ReasonRepost repost = 1;
+        ReasonPin pin = 2;
+    }
+}
+
+message FeedViewPostMessage {
+    optional string feed_context = 1;
+    mg.tonymushah.lanitra_manga.posts.view.PostViewMessage post = 2;
+    optional mg.tonymushah.lanitra_manga.posts.view.ReplyRefMessage reply = 3;
+    optional FeedViewPostReason reason = 4;
+}
+
+message GetTimelineResponse {
+    repeated FeedViewPostMessage feed = 1;
+    optional string cursor = 2;
+}
+
+service Feeds {
+    rpc getTimeline(GetTimelineRequest) returns (GetTimelineResponse);
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "commons.proto";
+
+package mg.tonymushah.lanitra_manga.profiles;
+
+message ProfileViewBasic {
+    string did = 1;
+    string handle = 2;
+    optional string display_name = 3;
+    optional string created_at = 4;
+}

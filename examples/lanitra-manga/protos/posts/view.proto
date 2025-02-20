@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+import "commons.proto";
+import "profiles.proto";
+
+package mg.tonymushah.lanitra_manga.posts.view;
+
+message PostViewMessage {
+    string cid = 1;
+    string uri = 2;
+    mg.tonymushah.lanitra_manga.profiles.ProfileViewBasic author = 3;
+    optional int64 like_count = 4;
+    optional int64 quote_count = 5;
+    optional int64 reply_count = 6;
+    optional int64 repost_cound = 7;
+    string indexed_at = 8;
+}
+
+message ViewPostThreadRequest {
+    string uri = 1;
+    optional uint32 depth = 2;
+    optional uint32 parent_height = 3;
+}
+
+message NotFoundPost {
+    string uri = 1;
+    bool not_found = 2;
+}
+
+message BlockedPost{
+    string uri = 1;
+    bool blocked = 2;
+    string author_did = 3;
+}
+
+message ThreadViewPostInner {
+    oneof actual_post {
+        TheardViewPost post = 1;
+        NotFoundPost not_found = 2;
+        BlockedPost blocked_post = 3;
+    }
+}
+
+message TheardViewPost {
+    optional ThreadViewPostInner parent = 1;
+    PostViewMessage post = 2;
+    repeated ThreadViewPostInner replies = 3;
+}
+
+message ViewThreadResponse {
+    TheardViewPost thread = 1;
+}
+
+message ViewPostsRequest {
+    repeated string uri = 1;
+}
+
+message ViewPostsResponse {
+    repeated PostViewMessage posts = 1;
+}
+
+service PostViews {
+    rpc viewPostThread (ViewPostThreadRequest) returns (ViewThreadResponse);
+    rpc getPosts (ViewPostsRequest) returns (ViewPostsResponse);
+}
+
+message ReplyRefMessage {
+    ThreadViewPostInner root = 1;
+    ThreadViewPostInner parent = 2;
+    optional mg.tonymushah.lanitra_manga.profiles.ProfileViewBasic grandparent_author = 3;
+}

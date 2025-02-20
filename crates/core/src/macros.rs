@@ -4,7 +4,7 @@
 ///
 /// ```rust,ignore
 /// mod pb {
-///     tonic::include_proto!("helloworld");
+///     kanamaru::include_proto!("helloworld");
 /// }
 /// ```
 ///

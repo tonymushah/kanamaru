@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package mg.tonymushah.lanitra_manga.auth;
+
+message LoginRequestMessage {
+    
+}

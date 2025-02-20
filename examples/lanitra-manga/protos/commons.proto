@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package mg.tonymushah.lanitra_manga;
+
+message Empty {}
+
+message RichText {
+    string text = 1;
+    optional bool detect_facets = 2;
+}
+
+message RichTextDetails {
+    string markdown = 1;
+    uint64 length = 2;
+    uint64 grapheme_length = 3;
+}
+
+message DateTime {
+    string date = 1;
+}
+
+message CommitMetadata {
+    string cid = 1;
+    string rev = 2;
+}
+
+message DataRef {
+    string cid = 1;
+    string uri = 2;
+    optional CommitMetadata commit = 3;
+    optional string validation_status = 4;
+}
+
+message MainData {
+    string cid = 1;
+    string uri = 2;
+}
+
+service Utils {
+    rpc getRichTextDetails(RichText) returns (RichTextDetails);
+    rpc getRichTextDetailsStream(stream RichText) returns (stream RichTextDetails);
+}

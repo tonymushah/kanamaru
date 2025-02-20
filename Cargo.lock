@@ -2316,6 +2316,57 @@ dependencies = [
 ]
 
 [[package]]
+name = "lanitra-manga-auth"
+version = "0.1.0"
+dependencies = [
+ "kanamaru",
+ "kanamaru-build",
+ "prost",
+]
+
+[[package]]
+name = "lanitra-manga-commons"
+version = "0.1.0"
+dependencies = [
+ "kanamaru",
+ "kanamaru-build",
+ "prost",
+]
+
+[[package]]
+name = "lanitra-manga-feeds"
+version = "0.1.0"
+dependencies = [
+ "kanamaru",
+ "kanamaru-build",
+ "lanitra-manga-commons",
+ "lanitra-manga-posts",
+ "lanitra-manga-profiles",
+ "prost",
+]
+
+[[package]]
+name = "lanitra-manga-posts"
+version = "0.1.0"
+dependencies = [
+ "kanamaru",
+ "kanamaru-build",
+ "lanitra-manga-commons",
+ "lanitra-manga-profiles",
+ "prost",
+]
+
+[[package]]
+name = "lanitra-manga-profiles"
+version = "0.1.0"
+dependencies = [
+ "kanamaru",
+ "kanamaru-build",
+ "lanitra-manga-commons",
+ "prost",
+]
+
+[[package]]
 name = "lanitra-manga-rpc"
 version = "0.1.0"
 dependencies = [

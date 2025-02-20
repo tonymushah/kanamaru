@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package mg.tonymushah.lanitra_manga.posts;
+
+import "commons.proto";
+
+message EmbededImage {
+    string alt = 1;
+    string path = 2;
+}
+
+message EmbededImages {
+    repeated EmbededImage images = 1;
+}
+
+message EmbededVideo {
+    optional string alt = 1;
+    string path = 2;
+}
+
+message EmbededVideos {
+    repeated EmbededVideo videos = 1;
+}
+
+message EmbededExternal {
+    string description = 1;
+    string title = 2;
+    string uri = 3;
+    optional bool include_thumb = 4;
+}
+
+message EmbededExternals {
+    EmbededExternal externals = 1;
+}
+
+message EmbededPost {
+    mg.tonymushah.lanitra_manga.MainData post = 1;
+}
+
+message EmbededPosts {
+    repeated EmbededPost posts = 1;
+}
+
+message EmbededPostWithMedia {
+    mg.tonymushah.lanitra_manga.MainData post = 1;
+    oneof media {
+        EmbededImages images = 2;
+        EmbededExternals externals = 3;
+        EmbededVideos videos = 4;
+    }
+}
+
+message EmbededPostWithMedias {
+    EmbededPostWithMedia posts_with_medias = 1;
+}
+
+message PostRecord {
+    optional string datetime = 1;
+    mg.tonymushah.lanitra_manga.RichText text = 2;
+    repeated PostRecord replies = 3;
+    oneof embeded {
+        EmbededImages images = 4;
+        EmbededExternals externals = 5;
+        EmbededVideos videos = 6;
+        EmbededPosts posts = 7;
+        EmbededPostWithMedias posts_with_medias = 8;
+    }
+}
+
+message ClearPostsServiceResponses {
+    optional mg.tonymushah.lanitra_manga.DataRef root = 1;
+}
+
+service PostsService {
+    rpc post (PostRecord) returns (mg.tonymushah.lanitra_manga.DataRef);
+    rpc replyToLastPost(stream PostRecord) returns (mg.tonymushah.lanitra_manga.DataRef);
+    rpc makeThreadStream(stream PostRecord) returns (mg.tonymushah.lanitra_manga.DataRef);
+    rpc clear(mg.tonymushah.lanitra_manga.Empty) returns (ClearPostsServiceResponses);
+}

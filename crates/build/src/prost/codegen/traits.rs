@@ -63,7 +63,7 @@ impl<S: Service> GenerateTraitService<'_, S> {
                         type #stream: kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<IpcMessage<#res_message>, kanamaru::Status>> + std::marker::Send + 'static;
 
                         #method_doc
-                        async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
+                        async fn #name<R: Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
                             -> std::result::Result<kanamaru::StreamingResponse<#res_message, Self::#stream>, kanamaru::Status> {
                             #not_implemented
                         }
@@ -81,14 +81,14 @@ impl<S: Service> GenerateTraitService<'_, S> {
                         type #stream: kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<IpcMessage<#res_message>, kanamaru::Status>> + std::marker::Send + 'static;
 
                         #method_doc
-                        async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
+                        async fn #name<R: Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
                             -> std::result::Result<kanamaru::StreamingResponse<#res_message, Self::#stream>, kanamaru::Status>;
                     }
                 }
                 (true, false, true) => {
                     quote! {
                         #method_doc
-                        async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
+                        async fn #name<R: Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
                             -> std::result::Result<kanamaru::UnaryResponse<#res_message>, kanamaru::Status> {
                             #not_implemented
                         }
@@ -97,7 +97,7 @@ impl<S: Service> GenerateTraitService<'_, S> {
                 (true, false, false) => {
                     quote! {
                         #method_doc
-                        async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
+                        async fn #name<R: Runtime>(#self_param, request: kanamaru::StreamingRequest<R, #req_message>)
                             -> std::result::Result<kanamaru::UnaryResponse<#res_message>, kanamaru::Status>;
                     }
                 }
@@ -113,7 +113,7 @@ impl<S: Service> GenerateTraitService<'_, S> {
                         type #stream: kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<IpcMessage<#res_message>, kanamaru::Status>> + std::marker::Send + 'static;
 
                         #method_doc
-                        async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
+                        async fn #name<R: Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
                             -> std::result::Result<kanamaru::StreamingResponse<#res_message, Self::#stream>, kanamaru::Status> {
                             #not_implemented
                         }
@@ -131,14 +131,14 @@ impl<S: Service> GenerateTraitService<'_, S> {
                         type #stream: kanamaru::codegen::tokio_stream::Stream<Item = std::result::Result<IpcMessage<#res_message>, kanamaru::Status>> + std::marker::Send + 'static;
 
                         #method_doc
-                        async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
+                        async fn #name<R: Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
                             -> std::result::Result<kanamaru::StreamingResponse<#res_message, Self::#stream>, kanamaru::Status>;
                     }
                 }
                 (false, false, true) => {
                     quote! {
                         #method_doc
-                        async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
+                        async fn #name<R: Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
                             -> std::result::Result<kanamaru::UnaryResponse<#res_message>, kanamaru::Status>{
                             #not_implemented
                         }
@@ -147,7 +147,7 @@ impl<S: Service> GenerateTraitService<'_, S> {
                 (false, false, false) => {
                     quote! {
                         #method_doc
-                        async fn #name<R: tauri::Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
+                        async fn #name<R: Runtime>(#self_param, request: kanamaru::UnaryRequest<R, #req_message>)
                             -> std::result::Result<kanamaru::UnaryResponse<#res_message>, kanamaru::Status>;
                     }
                 }
