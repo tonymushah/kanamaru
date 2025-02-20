@@ -14,7 +14,7 @@ use tauri::{
     AppHandle, Emitter, EventTarget, RunEvent, Runtime, Url, Webview, Window, WindowEvent,
 };
 
-use crate::{ipc::request::RawRequest, Routes, Status};
+use crate::{ipc::request::RawRequest, Builder, Routes, Status};
 
 pub(crate) type SetupHook<R> = dyn FnOnce(&AppHandle<R>, JsonValue, &mut Routes<R>) -> Result<(), Box<dyn std::error::Error>>
     + Send;
@@ -37,6 +37,15 @@ pub struct KanamaruPlugin<R: Runtime> {
     on_drop: Option<Box<OnDrop<R>>>,
     on_window_ready: Box<OnWindowReady<R>>,
     on_navigation: Box<OnNavigation<R>>,
+}
+
+impl<R> KanamaruPlugin<R>
+where
+    R: Runtime,
+{
+    pub fn builder(name: &'static str) -> builder::Builder<R> {
+        Builder::new(name)
+    }
 }
 
 impl<R> Plugin<R> for KanamaruPlugin<R>
