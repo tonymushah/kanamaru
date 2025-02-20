@@ -29,3 +29,7 @@ chrono = "0.4.39"
 atrium-xrpc-client = { version = "0.5.11", default-features = false, features = [
     "reqwest",
 ] }
+lanitra-manga-commons = { path = "../crates/commons" }
+lanitra-manga-profiles = { path = "../crates/profiles" }
+lanitra-manga-posts = { path = "../crates/posts" }
+lanitra-manga-feeds = { path = "../crates/feeds" }
