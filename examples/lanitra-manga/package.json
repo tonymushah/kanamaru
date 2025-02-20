@@ -5,11 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "pnpm:proto:all && vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "proto:commons": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/commons.proto",
+    "proto:auth": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/auth.proto",
+    "proto:profiles": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/posts.proto",
+    "proto:feeds": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/feeds.proto",
+    "proto:posts": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/posts.proto",
+    "proto:posts:view": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/posts/view.proto",
+    "proto:all": "pnpm proto:commons && pnpm proto:auth && pnpm proto:profiles && pnpm proto:posts && pnpm proto:posts:view && pnpm proto:feeds"
   },
   "license": "MIT",
   "dependencies": {
