@@ -1,3 +1,11 @@
+## Default Permission
+
+lanitra-manga-rpc default permissions
+
+- `allow-client-streaming`
+- `allow-duplex`
+- `allow-unary`
+- `allow-server-streaming`
 
 ## Permission Table
 

@@ -1,0 +1,10 @@
+"$schema" = "schemas/schema.json"
+
+[default]
+description = "lanitra-manga-rpc default permissions"
+permissions = [
+    "allow-client-streaming",
+    "allow-duplex",
+    "allow-unary",
+    "allow-server-streaming",
+]
