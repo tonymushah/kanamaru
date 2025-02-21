@@ -15,3 +15,14 @@ pub use ipc::{
 pub use plugin::{builder::Builder, KanamaruPlugin};
 pub use responder::{RPCType, Responder, Routes};
 pub use status::{AsCode, Code, Status};
+
+pub mod prelude {
+    pub use async_trait::async_trait;
+
+    pub use super::ipc::{
+        request::RequestBase, StreamingRequest, StreamingResponse, UnaryRequest, UnaryResponse,
+    };
+    pub use super::plugin::{builder::Builder, KanamaruPlugin};
+    pub use super::responder::{RPCType, Responder, Routes};
+    pub use super::status::{AsCode, Code, Status};
+}
