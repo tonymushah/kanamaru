@@ -10,7 +10,8 @@ pub mod utils;
 pub use async_trait::async_trait;
 
 pub use ipc::{
-    request::RequestBase, StreamingRequest, StreamingResponse, UnaryRequest, UnaryResponse,
+    request::RequestBase, IpcMessage, StreamingRequest, StreamingResponse, UnaryRequest,
+    UnaryResponse,
 };
 pub use plugin::{builder::Builder, KanamaruPlugin};
 pub use responder::{RPCType, Responder, Routes};
@@ -20,7 +21,8 @@ pub mod prelude {
     pub use async_trait::async_trait;
 
     pub use super::ipc::{
-        request::RequestBase, StreamingRequest, StreamingResponse, UnaryRequest, UnaryResponse,
+        request::RequestBase, IpcMessage, StreamingRequest, StreamingResponse, UnaryRequest,
+        UnaryResponse,
     };
     pub use super::plugin::{builder::Builder, KanamaruPlugin};
     pub use super::responder::{RPCType, Responder, Routes};
