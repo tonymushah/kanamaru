@@ -33,3 +33,11 @@ lanitra-manga-commons = { path = "../crates/commons" }
 lanitra-manga-profiles = { path = "../crates/profiles" }
 lanitra-manga-posts = { path = "../crates/posts" }
 lanitra-manga-feeds = { path = "../crates/feeds" }
+derive_more = { version = "2.0.1", features = [
+    "constructor",
+    "deref",
+    "deref_mut",
+    "from",
+] }
+tower = { workspace = true, features = ["limit", "buffer"] }
+duration-string = { version = "0.5", features = ["serde"] }
