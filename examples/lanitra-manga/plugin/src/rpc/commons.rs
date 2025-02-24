@@ -3,7 +3,7 @@ use std::pin::Pin;
 use kanamaru::prelude::*;
 
 use bsky_sdk::rich_text::RichText as SdkRichText;
-use lanitra_manga_commons::{utils_server::Utils, RichText, RichTextDetails};
+use lanitra_manga_commons::{utils_responder::Utils, RichText, RichTextDetails};
 use tauri::Runtime;
 use tokio_stream::{Stream, StreamExt};
 
