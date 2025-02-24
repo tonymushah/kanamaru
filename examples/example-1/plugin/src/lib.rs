@@ -9,7 +9,7 @@ use kanamaru::{
 };
 use protos::{
     example1::{
-        hello_service_server::{HelloService, HelloServiceResponder},
+        hello_service_responder::{HelloService, HelloServiceResponder},
         HelloRequest, HelloResponse,
     },
     Empty,
