@@ -13,3 +13,5 @@ kanamaru-build = { workspace = true, default-features = false, features = [
 kanamaru = { workspace = true }
 prost = { workspace = true }
 lanitra-manga-commons = { path = "../commons" }
+bsky-sdk = { workspace = true }
+atrium-api = { workspace = true }

@@ -15,3 +15,5 @@ prost = { workspace = true }
 lanitra-manga-commons = { path = "../commons" }
 lanitra-manga-profiles = { path = "../profiles" }
 lanitra-manga-posts = { path = "../posts" }
+bsky-sdk = { workspace = true }
+atrium-api = { workspace = true }

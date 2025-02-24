@@ -36,6 +36,9 @@ kanamaru-build = { path = "./crates/build", default-features = false }
 anyhow = "1"
 tauri-build = "2"
 reqwest = "0.12.12"
+# Lanitra manga example dependencies
+atrium-api = "0.25.0"
+bsky-sdk = "0.1.16"
 
 [workspace.package]
 authors = ["tonymushah <tonymushahDev06@yahoo.com>"]

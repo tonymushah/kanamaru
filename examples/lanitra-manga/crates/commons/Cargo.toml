@@ -12,3 +12,5 @@ kanamaru-build = { workspace = true, default-features = false, features = [
 [dependencies]
 kanamaru = { workspace = true }
 prost = { workspace = true }
+bsky-sdk = { workspace = true }
+atrium-api = { workspace = true }

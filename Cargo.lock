@@ -2348,6 +2348,8 @@ dependencies = [
 name = "lanitra-manga-auth"
 version = "0.1.0"
 dependencies = [
+ "atrium-api",
+ "bsky-sdk",
  "kanamaru",
  "kanamaru-build",
  "prost",
@@ -2357,6 +2359,8 @@ dependencies = [
 name = "lanitra-manga-commons"
 version = "0.1.0"
 dependencies = [
+ "atrium-api",
+ "bsky-sdk",
  "kanamaru",
  "kanamaru-build",
  "prost",
@@ -2366,6 +2370,8 @@ dependencies = [
 name = "lanitra-manga-feeds"
 version = "0.1.0"
 dependencies = [
+ "atrium-api",
+ "bsky-sdk",
  "kanamaru",
  "kanamaru-build",
  "lanitra-manga-commons",
@@ -2378,6 +2384,8 @@ dependencies = [
 name = "lanitra-manga-posts"
 version = "0.1.0"
 dependencies = [
+ "atrium-api",
+ "bsky-sdk",
  "kanamaru",
  "kanamaru-build",
  "lanitra-manga-commons",
@@ -2389,6 +2397,8 @@ dependencies = [
 name = "lanitra-manga-profiles"
 version = "0.1.0"
 dependencies = [
+ "atrium-api",
+ "bsky-sdk",
  "kanamaru",
  "kanamaru-build",
  "lanitra-manga-commons",

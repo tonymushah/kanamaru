@@ -21,9 +21,9 @@ prost-types = { workspace = true }
 tokio = { workspace = true, features = ["macros"] }
 tokio-stream.workspace = true
 async-stream = "0.3.6"
-bsky-sdk = "0.1.16"
+bsky-sdk = { workspace = true }
+atrium-api = { workspace = true }
 reqwest = { workspace = true }
-atrium-api = "0.25.0"
 time = "0.3.37"
 chrono = "0.4.39"
 atrium-xrpc-client = { version = "0.5.11", default-features = false, features = [
