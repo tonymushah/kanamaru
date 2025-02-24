@@ -9,4 +9,6 @@ message ProfileViewBasic {
     string handle = 2;
     optional string display_name = 3;
     optional string created_at = 4;
+    optional string avatar = 5;
+    optional string description = 6;
 }

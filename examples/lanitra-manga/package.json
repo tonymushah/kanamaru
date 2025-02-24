@@ -12,7 +12,7 @@
     "tauri": "tauri",
     "proto:commons": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/commons.proto",
     "proto:auth": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/auth.proto",
-    "proto:profiles": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/posts.proto",
+    "proto:profiles": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/profiles.proto",
     "proto:feeds": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/feeds.proto",
     "proto:posts": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/posts.proto",
     "proto:posts:view": "protoc --ts_opt server_none --ts_out ./src/lib/protos/ --proto_path ./protos ./protos/posts/view.proto",
