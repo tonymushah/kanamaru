@@ -136,6 +136,19 @@ export interface GetFeedResponse {
      */
     cursor?: string;
 }
+/**
+ * @generated from protobuf message mg.tonymushah.lanitra_manga.feeds.GetHomeFeedRequest
+ */
+export interface GetHomeFeedRequest {
+    /**
+     * @generated from protobuf field: optional string cursor = 2;
+     */
+    cursor?: string;
+    /**
+     * @generated from protobuf field: optional uint32 limit = 3;
+     */
+    limit?: number;
+}
 // @generated message type with reflection information, may provide speed optimized methods
 class GetTimelineRequest$Type extends MessageType<GetTimelineRequest> {
     constructor() {
@@ -571,10 +584,64 @@ class GetFeedResponse$Type extends MessageType<GetFeedResponse> {
  * @generated MessageType for protobuf message mg.tonymushah.lanitra_manga.feeds.GetFeedResponse
  */
 export const GetFeedResponse = new GetFeedResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetHomeFeedRequest$Type extends MessageType<GetHomeFeedRequest> {
+    constructor() {
+        super("mg.tonymushah.lanitra_manga.feeds.GetHomeFeedRequest", [
+            { no: 2, name: "cursor", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "limit", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<GetHomeFeedRequest>): GetHomeFeedRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<GetHomeFeedRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetHomeFeedRequest): GetHomeFeedRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* optional string cursor */ 2:
+                    message.cursor = reader.string();
+                    break;
+                case /* optional uint32 limit */ 3:
+                    message.limit = reader.uint32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetHomeFeedRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* optional string cursor = 2; */
+        if (message.cursor !== undefined)
+            writer.tag(2, WireType.LengthDelimited).string(message.cursor);
+        /* optional uint32 limit = 3; */
+        if (message.limit !== undefined)
+            writer.tag(3, WireType.Varint).uint32(message.limit);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mg.tonymushah.lanitra_manga.feeds.GetHomeFeedRequest
+ */
+export const GetHomeFeedRequest = new GetHomeFeedRequest$Type();
 /**
  * @generated ServiceType for protobuf service mg.tonymushah.lanitra_manga.feeds.Feeds
  */
 export const Feeds = new ServiceType("mg.tonymushah.lanitra_manga.feeds.Feeds", [
     { name: "getTimeline", options: {}, I: GetTimelineRequest, O: GetTimelineResponse },
-    { name: "getFeed", options: {}, I: GetFeedRequest, O: GetFeedResponse }
+    { name: "getFeed", options: {}, I: GetFeedRequest, O: GetFeedResponse },
+    { name: "getHomeFeed", options: {}, I: GetHomeFeedRequest, O: GetFeedResponse }
 ]);

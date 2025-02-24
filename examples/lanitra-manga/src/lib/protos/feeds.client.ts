@@ -4,6 +4,7 @@
 import type { RpcTransport } from "@protobuf-ts/runtime-rpc";
 import type { ServiceInfo } from "@protobuf-ts/runtime-rpc";
 import { Feeds } from "./feeds";
+import type { GetHomeFeedRequest } from "./feeds";
 import type { GetFeedResponse } from "./feeds";
 import type { GetFeedRequest } from "./feeds";
 import { stackIntercept } from "@protobuf-ts/runtime-rpc";
@@ -23,6 +24,10 @@ export interface IFeedsClient {
      * @generated from protobuf rpc: getFeed(mg.tonymushah.lanitra_manga.feeds.GetFeedRequest) returns (mg.tonymushah.lanitra_manga.feeds.GetFeedResponse);
      */
     getFeed(input: GetFeedRequest, options?: RpcOptions): UnaryCall<GetFeedRequest, GetFeedResponse>;
+    /**
+     * @generated from protobuf rpc: getHomeFeed(mg.tonymushah.lanitra_manga.feeds.GetHomeFeedRequest) returns (mg.tonymushah.lanitra_manga.feeds.GetFeedResponse);
+     */
+    getHomeFeed(input: GetHomeFeedRequest, options?: RpcOptions): UnaryCall<GetHomeFeedRequest, GetFeedResponse>;
 }
 /**
  * @generated from protobuf service mg.tonymushah.lanitra_manga.feeds.Feeds
@@ -46,5 +51,12 @@ export class FeedsClient implements IFeedsClient, ServiceInfo {
     getFeed(input: GetFeedRequest, options?: RpcOptions): UnaryCall<GetFeedRequest, GetFeedResponse> {
         const method = this.methods[1], opt = this._transport.mergeOptions(options);
         return stackIntercept<GetFeedRequest, GetFeedResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * @generated from protobuf rpc: getHomeFeed(mg.tonymushah.lanitra_manga.feeds.GetHomeFeedRequest) returns (mg.tonymushah.lanitra_manga.feeds.GetFeedResponse);
+     */
+    getHomeFeed(input: GetHomeFeedRequest, options?: RpcOptions): UnaryCall<GetHomeFeedRequest, GetFeedResponse> {
+        const method = this.methods[2], opt = this._transport.mergeOptions(options);
+        return stackIntercept<GetHomeFeedRequest, GetFeedResponse>("unary", this._transport, method, opt, input);
     }
 }

@@ -50,7 +50,14 @@ message GetFeedResponse {
     optional string cursor = 2;
 }
 
+message GetHomeFeedRequest {
+    optional string cursor = 2;
+    optional uint32 limit = 3;
+}
+
+
 service Feeds {
     rpc getTimeline(GetTimelineRequest) returns (GetTimelineResponse);
     rpc getFeed(GetFeedRequest) returns (GetFeedResponse);
+    rpc getHomeFeed(GetHomeFeedRequest) returns (GetFeedResponse);
 }
