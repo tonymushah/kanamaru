@@ -14,6 +14,7 @@ message PostViewMessage {
     optional int64 reply_count = 6;
     optional int64 repost_cound = 7;
     string indexed_at = 8;
+    optional mg.tonymushah.lanitra_manga.RichTextDetails content = 9;
 }
 
 message ViewPostThreadRequest {
@@ -48,7 +49,7 @@ message TheardViewPost {
 }
 
 message ViewThreadResponse {
-    TheardViewPost thread = 1;
+    ThreadViewPostInner thread = 1;
 }
 
 message ViewPostsRequest {

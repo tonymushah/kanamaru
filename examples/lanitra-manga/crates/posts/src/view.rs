@@ -1,3 +1,7 @@
+pub mod into_impl;
+
+use lanitra_manga_commons::RichTextDetails;
+
 mod inner {
     kanamaru::include_proto!("mg.tonymushah.lanitra_manga.posts.view");
 }
