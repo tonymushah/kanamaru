@@ -3,13 +3,17 @@ use std::pin::Pin;
 use kanamaru::prelude::*;
 
 use bsky_sdk::rich_text::RichText as SdkRichText;
-use lanitra_manga_commons::{utils_responder::Utils, RichText, RichTextDetails};
+use lanitra_manga_commons::{
+    into_impl::get_rich_text_details, utils_responder::Utils, RichText, RichTextDetails,
+};
 use tauri::Runtime;
 use tokio_stream::{Stream, StreamExt};
 
 use crate::client::GetBskyClient;
 
 pub struct UtilsService;
+
+pub const PROFILE_BASE_URL: &str = "https://bsky.app/profile/";
 
 #[async_trait]
 impl Utils for UtilsService {
@@ -25,27 +29,10 @@ impl Utils for UtilsService {
                 .detect_facets(clients.bsky_reqwest.clone())
                 .await?;
         }
-        Ok(UnaryResponse::new(RichTextDetails {
-            markdown: {
-                let mut markdown = String::new();
-                for segment in rich_text.segments() {
-                    if let Some(link) = segment.link() {
-                        markdown += &format!("[{}]({})", segment.text, link.uri);
-                    } else if let Some(mention) = segment.mention() {
-                        markdown += &format!(
-                            "[{}](https://bsky.app/profile/{})",
-                            segment.text,
-                            mention.did.as_str()
-                        );
-                    } else {
-                        markdown += &segment.text;
-                    }
-                }
-                markdown
-            },
-            length: rich_text.segments().len() as u64,
-            grapheme_length: rich_text.grapheme_len() as u64,
-        }))
+        Ok(UnaryResponse::new(get_rich_text_details(
+            &rich_text,
+            PROFILE_BASE_URL,
+        )))
     }
     type GetRichTextDetailsStreamStream = Pin<
         Box<dyn Stream<Item = Result<IpcMessage<RichTextDetails>, Status>> + Send + Sync + 'static>,
@@ -68,27 +55,7 @@ impl Utils for UtilsService {
                         .detect_facets(clients.bsky_reqwest.clone())
                         .await?;
                 }
-                yield IpcMessage::new(RichTextDetails {
-                    markdown: {
-                        let mut markdown = String::new();
-                        for segment in rich_text.segments() {
-                            if let Some(link) = segment.link() {
-                                markdown += &format!("[{}]({})", segment.text, link.uri);
-                            } else if let Some(mention) = segment.mention() {
-                                markdown += &format!(
-                                    "[{}](https://bsky.app/profile/{})",
-                                    segment.text,
-                                    mention.did.as_str()
-                                );
-                            } else {
-                                markdown += &segment.text;
-                            }
-                        }
-                        markdown
-                    },
-                    length: rich_text.segments().len() as u64,
-                    grapheme_length: rich_text.grapheme_len() as u64,
-                });
+                yield IpcMessage::new(get_rich_text_details(&rich_text, PROFILE_BASE_URL));
             }
         };
         Ok(StreamingResponse::new(Box::pin(stream)))
