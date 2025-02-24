@@ -39,6 +39,18 @@ message GetTimelineResponse {
     optional string cursor = 2;
 }
 
+message GetFeedRequest {
+    string feed = 1;
+    optional string cursor = 2;
+    optional uint32 limit = 3;
+}
+
+message GetFeedResponse {
+    repeated FeedViewPostMessage feed = 1;
+    optional string cursor = 2;
+}
+
 service Feeds {
     rpc getTimeline(GetTimelineRequest) returns (GetTimelineResponse);
+    rpc getFeed(GetFeedRequest) returns (GetFeedResponse);
 }

@@ -11,6 +11,7 @@ import { UnknownFieldHandler } from "@protobuf-ts/runtime";
 import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { RichTextDetails } from "../commons";
 import { ProfileViewBasic } from "../profiles";
 /**
  * @generated from protobuf message mg.tonymushah.lanitra_manga.posts.view.PostViewMessage
@@ -48,6 +49,10 @@ export interface PostViewMessage {
      * @generated from protobuf field: string indexed_at = 8;
      */
     indexedAt: string;
+    /**
+     * @generated from protobuf field: optional mg.tonymushah.lanitra_manga.RichTextDetails content = 9;
+     */
+    content?: RichTextDetails;
 }
 /**
  * @generated from protobuf message mg.tonymushah.lanitra_manga.posts.view.ViewPostThreadRequest
@@ -147,9 +152,9 @@ export interface TheardViewPost {
  */
 export interface ViewThreadResponse {
     /**
-     * @generated from protobuf field: mg.tonymushah.lanitra_manga.posts.view.TheardViewPost thread = 1;
+     * @generated from protobuf field: mg.tonymushah.lanitra_manga.posts.view.ThreadViewPostInner thread = 1;
      */
-    thread?: TheardViewPost;
+    thread?: ThreadViewPostInner;
 }
 /**
  * @generated from protobuf message mg.tonymushah.lanitra_manga.posts.view.ViewPostsRequest
@@ -197,7 +202,8 @@ class PostViewMessage$Type extends MessageType<PostViewMessage> {
             { no: 5, name: "quote_count", kind: "scalar", opt: true, T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
             { no: 6, name: "reply_count", kind: "scalar", opt: true, T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
             { no: 7, name: "repost_cound", kind: "scalar", opt: true, T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 8, name: "indexed_at", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 8, name: "indexed_at", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 9, name: "content", kind: "message", T: () => RichTextDetails }
         ]);
     }
     create(value?: PartialMessage<PostViewMessage>): PostViewMessage {
@@ -238,6 +244,9 @@ class PostViewMessage$Type extends MessageType<PostViewMessage> {
                 case /* string indexed_at */ 8:
                     message.indexedAt = reader.string();
                     break;
+                case /* optional mg.tonymushah.lanitra_manga.RichTextDetails content */ 9:
+                    message.content = RichTextDetails.internalBinaryRead(reader, reader.uint32(), options, message.content);
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -274,6 +283,9 @@ class PostViewMessage$Type extends MessageType<PostViewMessage> {
         /* string indexed_at = 8; */
         if (message.indexedAt !== "")
             writer.tag(8, WireType.LengthDelimited).string(message.indexedAt);
+        /* optional mg.tonymushah.lanitra_manga.RichTextDetails content = 9; */
+        if (message.content)
+            RichTextDetails.internalBinaryWrite(message.content, writer.tag(9, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -598,7 +610,7 @@ export const TheardViewPost = new TheardViewPost$Type();
 class ViewThreadResponse$Type extends MessageType<ViewThreadResponse> {
     constructor() {
         super("mg.tonymushah.lanitra_manga.posts.view.ViewThreadResponse", [
-            { no: 1, name: "thread", kind: "message", T: () => TheardViewPost }
+            { no: 1, name: "thread", kind: "message", T: () => ThreadViewPostInner }
         ]);
     }
     create(value?: PartialMessage<ViewThreadResponse>): ViewThreadResponse {
@@ -612,8 +624,8 @@ class ViewThreadResponse$Type extends MessageType<ViewThreadResponse> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* mg.tonymushah.lanitra_manga.posts.view.TheardViewPost thread */ 1:
-                    message.thread = TheardViewPost.internalBinaryRead(reader, reader.uint32(), options, message.thread);
+                case /* mg.tonymushah.lanitra_manga.posts.view.ThreadViewPostInner thread */ 1:
+                    message.thread = ThreadViewPostInner.internalBinaryRead(reader, reader.uint32(), options, message.thread);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -627,9 +639,9 @@ class ViewThreadResponse$Type extends MessageType<ViewThreadResponse> {
         return message;
     }
     internalBinaryWrite(message: ViewThreadResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* mg.tonymushah.lanitra_manga.posts.view.TheardViewPost thread = 1; */
+        /* mg.tonymushah.lanitra_manga.posts.view.ThreadViewPostInner thread = 1; */
         if (message.thread)
-            TheardViewPost.internalBinaryWrite(message.thread, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+            ThreadViewPostInner.internalBinaryWrite(message.thread, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

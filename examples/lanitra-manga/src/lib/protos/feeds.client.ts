@@ -4,6 +4,8 @@
 import type { RpcTransport } from "@protobuf-ts/runtime-rpc";
 import type { ServiceInfo } from "@protobuf-ts/runtime-rpc";
 import { Feeds } from "./feeds";
+import type { GetFeedResponse } from "./feeds";
+import type { GetFeedRequest } from "./feeds";
 import { stackIntercept } from "@protobuf-ts/runtime-rpc";
 import type { GetTimelineResponse } from "./feeds";
 import type { GetTimelineRequest } from "./feeds";
@@ -17,6 +19,10 @@ export interface IFeedsClient {
      * @generated from protobuf rpc: getTimeline(mg.tonymushah.lanitra_manga.feeds.GetTimelineRequest) returns (mg.tonymushah.lanitra_manga.feeds.GetTimelineResponse);
      */
     getTimeline(input: GetTimelineRequest, options?: RpcOptions): UnaryCall<GetTimelineRequest, GetTimelineResponse>;
+    /**
+     * @generated from protobuf rpc: getFeed(mg.tonymushah.lanitra_manga.feeds.GetFeedRequest) returns (mg.tonymushah.lanitra_manga.feeds.GetFeedResponse);
+     */
+    getFeed(input: GetFeedRequest, options?: RpcOptions): UnaryCall<GetFeedRequest, GetFeedResponse>;
 }
 /**
  * @generated from protobuf service mg.tonymushah.lanitra_manga.feeds.Feeds
@@ -33,5 +39,12 @@ export class FeedsClient implements IFeedsClient, ServiceInfo {
     getTimeline(input: GetTimelineRequest, options?: RpcOptions): UnaryCall<GetTimelineRequest, GetTimelineResponse> {
         const method = this.methods[0], opt = this._transport.mergeOptions(options);
         return stackIntercept<GetTimelineRequest, GetTimelineResponse>("unary", this._transport, method, opt, input);
+    }
+    /**
+     * @generated from protobuf rpc: getFeed(mg.tonymushah.lanitra_manga.feeds.GetFeedRequest) returns (mg.tonymushah.lanitra_manga.feeds.GetFeedResponse);
+     */
+    getFeed(input: GetFeedRequest, options?: RpcOptions): UnaryCall<GetFeedRequest, GetFeedResponse> {
+        const method = this.methods[1], opt = this._transport.mergeOptions(options);
+        return stackIntercept<GetFeedRequest, GetFeedResponse>("unary", this._transport, method, opt, input);
     }
 }
