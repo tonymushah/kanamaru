@@ -1,8 +1,9 @@
 use atrium_api::{
     app::bsky::feed::{
         defs::{
-            BlockedPostData, NotFoundPostData, PostViewData, ThreadViewPostData,
-            ThreadViewPostParentRefs, ThreadViewPostRepliesItem,
+            BlockedPostData, NotFoundPostData, PostViewData, ReplyRefData, ReplyRefParentRefs,
+            ReplyRefRootRefs, ThreadViewPostData, ThreadViewPostParentRefs,
+            ThreadViewPostRepliesItem,
         },
         get_post_thread::OutputThreadRefs,
     },
@@ -124,6 +125,62 @@ impl From<OutputThreadRefs> for super::ViewThreadResponse {
                     actual_post: Some(ActualPost::BlockedPost(object.data.into())),
                 }),
             },
+        }
+    }
+}
+
+impl From<ReplyRefRootRefs> for super::ThreadViewPostInner {
+    fn from(value: ReplyRefRootRefs) -> Self {
+        match value {
+            ReplyRefRootRefs::PostView(object) => Self {
+                actual_post: Some(ActualPost::Post(Box::new(super::TheardViewPost {
+                    parent: None,
+                    post: Some(object.data.into()),
+                    replies: Default::default(),
+                }))),
+            },
+            ReplyRefRootRefs::NotFoundPost(object) => Self {
+                actual_post: Some(ActualPost::NotFound(object.data.into())),
+            },
+            ReplyRefRootRefs::BlockedPost(object) => Self {
+                actual_post: Some(ActualPost::BlockedPost(object.data.into())),
+            },
+        }
+    }
+}
+
+impl From<ReplyRefParentRefs> for super::ThreadViewPostInner {
+    fn from(value: ReplyRefParentRefs) -> Self {
+        match value {
+            ReplyRefParentRefs::PostView(object) => Self {
+                actual_post: Some(ActualPost::Post(Box::new(super::TheardViewPost {
+                    parent: None,
+                    post: Some(object.data.into()),
+                    replies: Default::default(),
+                }))),
+            },
+            ReplyRefParentRefs::NotFoundPost(object) => Self {
+                actual_post: Some(ActualPost::NotFound(object.data.into())),
+            },
+            ReplyRefParentRefs::BlockedPost(object) => Self {
+                actual_post: Some(ActualPost::BlockedPost(object.data.into())),
+            },
+        }
+    }
+}
+
+impl From<ReplyRefData> for super::ReplyRefMessage {
+    fn from(value: ReplyRefData) -> Self {
+        Self {
+            root: match value.root {
+                Union::Refs(data) => Some(data.into()),
+                Union::Unknown(_) => None,
+            },
+            parent: match value.parent {
+                Union::Refs(data) => Some(data.into()),
+                Union::Unknown(_) => None,
+            },
+            grandparent_author: value.grandparent_author.map(|parent| parent.data.into()),
         }
     }
 }
