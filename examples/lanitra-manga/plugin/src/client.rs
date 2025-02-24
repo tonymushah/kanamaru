@@ -18,6 +18,7 @@ pub struct BskyClient(BskyAgent);
 
 pub struct ReqwestInnerClient {
     pub bsky_reqwest: ReqwestClient,
+    #[allow(dead_code)]
     pub client: Client,
 }
 
@@ -42,12 +43,14 @@ pub trait GetBskyClient<R>: Manager<R>
 where
     R: Runtime,
 {
+    #[allow(dead_code)]
     fn try_get_bsky_client(&self) -> Option<State<'_, BskyClient>> {
         self.try_state()
     }
     fn try_get_client_inner(&self) -> Option<State<'_, ReqwestInnerClient>> {
         self.try_state()
     }
+    #[allow(dead_code)]
     fn get_bsky_client(&self) -> State<'_, BskyClient> {
         self.try_get_bsky_client()
             .expect("The bskyClient is not initialized")
