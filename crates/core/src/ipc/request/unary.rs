@@ -70,6 +70,17 @@ where
     pub fn headers(&self) -> HeaderMap {
         self.headers_ref().clone()
     }
+    pub fn map_message<M1>(self, message: M1) -> UnaryRequest<R, M1>
+    where
+        M1: Message + Clone + Default,
+    {
+        UnaryRequest {
+            token: self.token,
+            message,
+            channel_status: self.channel_status,
+            headers: self.headers,
+        }
+    }
 }
 
 impl<R, M> AsRef<M> for UnaryRequest<R, M>

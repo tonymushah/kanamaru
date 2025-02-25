@@ -71,6 +71,15 @@ where
     pub fn into_inner(self) -> EventListnerStream<L, R> {
         self.into()
     }
+    pub fn map_message<M1>(self) -> EventListnerMessagesStream<L, R, M1>
+    where
+        M1: Message + Default,
+    {
+        EventListnerMessagesStream {
+            inner: self.inner,
+            ghosty_message_type: PhantomData::<M1>,
+        }
+    }
 }
 
 impl<L, R, M> Unpin for EventListnerMessagesStream<L, R, M>

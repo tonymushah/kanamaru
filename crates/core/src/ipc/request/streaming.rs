@@ -77,6 +77,17 @@ where
     pub fn stream_mut(&mut self) -> &mut EventListnerMessagesStream<Webview<R>, R, M> {
         &mut self.stream
     }
+    pub fn map_message<M1>(self) -> StreamingRequest<R, M1>
+    where
+        M1: Message + Default,
+    {
+        StreamingRequest {
+            metadata: self.metadata,
+            channel_status: self.channel_status,
+            stream: self.stream.map_message(),
+            cancel_token: self.cancel_token,
+        }
+    }
 }
 
 impl<R, M> TryFrom<&InvokeMessage<R>> for StreamingRequest<R, M>
