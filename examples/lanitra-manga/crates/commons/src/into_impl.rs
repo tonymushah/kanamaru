@@ -35,6 +35,20 @@ pub fn get_rich_text_details(rich_text: &RichText, base_url: &str) -> crate::Ric
     }
 }
 
+pub const PROFILE_BASE_URL: &str = "https://bsky.app/profile/";
+
+impl From<&RichText> for crate::RichTextDetails {
+    fn from(value: &RichText) -> Self {
+        get_rich_text_details(value, PROFILE_BASE_URL)
+    }
+}
+
+impl From<RichText> for crate::RichTextDetails {
+    fn from(value: RichText) -> Self {
+        get_rich_text_details(&value, PROFILE_BASE_URL)
+    }
+}
+
 impl From<MainData> for crate::MainData {
     fn from(value: MainData) -> Self {
         Self {
