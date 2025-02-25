@@ -8,10 +8,16 @@ pub struct ReqwestClientConfig {
     pub rate_limit_duration: Option<DurationString>,
 }
 
-#[derive(Debug, Deserialize, Clone, Default)]
+#[derive(Debug, Deserialize, Clone)]
+pub struct HomeConfig {
+    pub feed: String,
+}
+
+#[derive(Debug, Deserialize, Clone)]
 pub struct Config {
     #[serde(default)]
     pub bsk_config: BskyAgentConfig,
     #[serde(default)]
     pub reqwest: ReqwestClientConfig,
+    pub home: HomeConfig,
 }
