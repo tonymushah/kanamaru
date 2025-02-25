@@ -9,7 +9,9 @@ use lanitra_manga_commons::utils_responder::UtilsResponder;
 use lanitra_manga_feeds::feeds_responder::FeedsResponder;
 use serde::Deserialize;
 use tauri::Runtime;
+
 const PLUGIN_NAME: &str = "lanitra-manga";
+
 pub fn init<R: Runtime>() -> KanamaruPlugin<R> {
     KanamaruPlugin::builder(PLUGIN_NAME)
         .add_route(UtilsResponder::new(self::rpc::commons::UtilsService))
