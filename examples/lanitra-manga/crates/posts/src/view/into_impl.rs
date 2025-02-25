@@ -6,9 +6,11 @@ use atrium_api::{
             ThreadViewPostRepliesItem,
         },
         get_post_thread::OutputThreadRefs,
+        post::RecordData as PostRecordData,
     },
-    types::Union,
+    types::{TryFromUnknown, Union},
 };
+use bsky_sdk::rich_text::RichText;
 
 use super::{thread_view_post_inner::ActualPost, ThreadViewPostInner};
 
@@ -23,7 +25,9 @@ impl From<PostViewData> for super::PostViewMessage {
             reply_count: value.reply_count,
             repost_cound: value.repost_count,
             indexed_at: value.indexed_at.as_str().into(),
-            content: None,
+            content: PostRecordData::try_from_unknown(value.record.clone())
+                .ok()
+                .map(|content| RichText::new(&content.text, content.facets.clone()).into()),
         }
     }
 }
