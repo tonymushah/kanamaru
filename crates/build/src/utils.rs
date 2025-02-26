@@ -3,6 +3,8 @@
 use proc_macro2::{Delimiter, Group, Literal, Punct, Spacing, Span, TokenStream};
 use quote::TokenStreamExt;
 use syn::Ident;
+#[cfg(feature = "prost")]
+pub mod service_generator_chain;
 
 /// Service generation trait.
 ///
