@@ -11,6 +11,7 @@ import { UnknownFieldHandler } from "@protobuf-ts/runtime";
 import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { Empty } from "../commons";
 import { RichTextDetails } from "../commons";
 import { ProfileViewBasic } from "../profiles";
 import { AspectRatio } from "../commons";
@@ -91,35 +92,6 @@ export interface ViewExternal {
     thumb?: string;
 }
 /**
- * @generated from protobuf message mg.tonymushah.lanitra_manga.posts.view.PostViewEmbeded
- */
-export interface PostViewEmbeded {
-    /**
-     * @generated from protobuf oneof: media
-     */
-    media: {
-        oneofKind: "images";
-        /**
-         * @generated from protobuf field: mg.tonymushah.lanitra_manga.posts.view.ViewImages images = 1;
-         */
-        images: ViewImages;
-    } | {
-        oneofKind: "video";
-        /**
-         * @generated from protobuf field: mg.tonymushah.lanitra_manga.posts.view.ViewVideo video = 2;
-         */
-        video: ViewVideo;
-    } | {
-        oneofKind: "external";
-        /**
-         * @generated from protobuf field: mg.tonymushah.lanitra_manga.posts.view.ViewExternal external = 3;
-         */
-        external: ViewExternal;
-    } | {
-        oneofKind: undefined;
-    };
-}
-/**
  * @generated from protobuf message mg.tonymushah.lanitra_manga.posts.view.PostViewMessage
  */
 export interface PostViewMessage {
@@ -160,9 +132,35 @@ export interface PostViewMessage {
      */
     content?: RichTextDetails;
     /**
-     * @generated from protobuf field: repeated mg.tonymushah.lanitra_manga.posts.view.PostViewEmbeded embeds = 10;
+     * @generated from protobuf oneof: embed
      */
-    embeds: PostViewEmbeded[];
+    embed: {
+        oneofKind: "images";
+        /**
+         * @generated from protobuf field: mg.tonymushah.lanitra_manga.posts.view.ViewImages images = 10;
+         */
+        images: ViewImages;
+    } | {
+        oneofKind: "video";
+        /**
+         * @generated from protobuf field: mg.tonymushah.lanitra_manga.posts.view.ViewVideo video = 11;
+         */
+        video: ViewVideo;
+    } | {
+        oneofKind: "external";
+        /**
+         * @generated from protobuf field: mg.tonymushah.lanitra_manga.posts.view.ViewExternal external = 12;
+         */
+        external: ViewExternal;
+    } | {
+        oneofKind: "others";
+        /**
+         * @generated from protobuf field: mg.tonymushah.lanitra_manga.Empty others = 13;
+         */
+        others: Empty;
+    } | {
+        oneofKind: undefined;
+    };
 }
 /**
  * @generated from protobuf message mg.tonymushah.lanitra_manga.posts.view.ViewPostThreadRequest
@@ -565,76 +563,6 @@ class ViewExternal$Type extends MessageType<ViewExternal> {
  */
 export const ViewExternal = new ViewExternal$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class PostViewEmbeded$Type extends MessageType<PostViewEmbeded> {
-    constructor() {
-        super("mg.tonymushah.lanitra_manga.posts.view.PostViewEmbeded", [
-            { no: 1, name: "images", kind: "message", oneof: "media", T: () => ViewImages },
-            { no: 2, name: "video", kind: "message", oneof: "media", T: () => ViewVideo },
-            { no: 3, name: "external", kind: "message", oneof: "media", T: () => ViewExternal }
-        ]);
-    }
-    create(value?: PartialMessage<PostViewEmbeded>): PostViewEmbeded {
-        const message = globalThis.Object.create((this.messagePrototype!));
-        message.media = { oneofKind: undefined };
-        if (value !== undefined)
-            reflectionMergePartial<PostViewEmbeded>(this, message, value);
-        return message;
-    }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PostViewEmbeded): PostViewEmbeded {
-        let message = target ?? this.create(), end = reader.pos + length;
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag();
-            switch (fieldNo) {
-                case /* mg.tonymushah.lanitra_manga.posts.view.ViewImages images */ 1:
-                    message.media = {
-                        oneofKind: "images",
-                        images: ViewImages.internalBinaryRead(reader, reader.uint32(), options, (message.media as any).images)
-                    };
-                    break;
-                case /* mg.tonymushah.lanitra_manga.posts.view.ViewVideo video */ 2:
-                    message.media = {
-                        oneofKind: "video",
-                        video: ViewVideo.internalBinaryRead(reader, reader.uint32(), options, (message.media as any).video)
-                    };
-                    break;
-                case /* mg.tonymushah.lanitra_manga.posts.view.ViewExternal external */ 3:
-                    message.media = {
-                        oneofKind: "external",
-                        external: ViewExternal.internalBinaryRead(reader, reader.uint32(), options, (message.media as any).external)
-                    };
-                    break;
-                default:
-                    let u = options.readUnknownField;
-                    if (u === "throw")
-                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
-                    let d = reader.skip(wireType);
-                    if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
-            }
-        }
-        return message;
-    }
-    internalBinaryWrite(message: PostViewEmbeded, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* mg.tonymushah.lanitra_manga.posts.view.ViewImages images = 1; */
-        if (message.media.oneofKind === "images")
-            ViewImages.internalBinaryWrite(message.media.images, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
-        /* mg.tonymushah.lanitra_manga.posts.view.ViewVideo video = 2; */
-        if (message.media.oneofKind === "video")
-            ViewVideo.internalBinaryWrite(message.media.video, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
-        /* mg.tonymushah.lanitra_manga.posts.view.ViewExternal external = 3; */
-        if (message.media.oneofKind === "external")
-            ViewExternal.internalBinaryWrite(message.media.external, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
-        let u = options.writeUnknownFields;
-        if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
-        return writer;
-    }
-}
-/**
- * @generated MessageType for protobuf message mg.tonymushah.lanitra_manga.posts.view.PostViewEmbeded
- */
-export const PostViewEmbeded = new PostViewEmbeded$Type();
-// @generated message type with reflection information, may provide speed optimized methods
 class PostViewMessage$Type extends MessageType<PostViewMessage> {
     constructor() {
         super("mg.tonymushah.lanitra_manga.posts.view.PostViewMessage", [
@@ -647,7 +575,10 @@ class PostViewMessage$Type extends MessageType<PostViewMessage> {
             { no: 7, name: "repost_cound", kind: "scalar", opt: true, T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
             { no: 8, name: "indexed_at", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 9, name: "content", kind: "message", T: () => RichTextDetails },
-            { no: 10, name: "embeds", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => PostViewEmbeded }
+            { no: 10, name: "images", kind: "message", oneof: "embed", T: () => ViewImages },
+            { no: 11, name: "video", kind: "message", oneof: "embed", T: () => ViewVideo },
+            { no: 12, name: "external", kind: "message", oneof: "embed", T: () => ViewExternal },
+            { no: 13, name: "others", kind: "message", oneof: "embed", T: () => Empty }
         ]);
     }
     create(value?: PartialMessage<PostViewMessage>): PostViewMessage {
@@ -655,7 +586,7 @@ class PostViewMessage$Type extends MessageType<PostViewMessage> {
         message.cid = "";
         message.uri = "";
         message.indexedAt = "";
-        message.embeds = [];
+        message.embed = { oneofKind: undefined };
         if (value !== undefined)
             reflectionMergePartial<PostViewMessage>(this, message, value);
         return message;
@@ -692,8 +623,29 @@ class PostViewMessage$Type extends MessageType<PostViewMessage> {
                 case /* optional mg.tonymushah.lanitra_manga.RichTextDetails content */ 9:
                     message.content = RichTextDetails.internalBinaryRead(reader, reader.uint32(), options, message.content);
                     break;
-                case /* repeated mg.tonymushah.lanitra_manga.posts.view.PostViewEmbeded embeds */ 10:
-                    message.embeds.push(PostViewEmbeded.internalBinaryRead(reader, reader.uint32(), options));
+                case /* mg.tonymushah.lanitra_manga.posts.view.ViewImages images */ 10:
+                    message.embed = {
+                        oneofKind: "images",
+                        images: ViewImages.internalBinaryRead(reader, reader.uint32(), options, (message.embed as any).images)
+                    };
+                    break;
+                case /* mg.tonymushah.lanitra_manga.posts.view.ViewVideo video */ 11:
+                    message.embed = {
+                        oneofKind: "video",
+                        video: ViewVideo.internalBinaryRead(reader, reader.uint32(), options, (message.embed as any).video)
+                    };
+                    break;
+                case /* mg.tonymushah.lanitra_manga.posts.view.ViewExternal external */ 12:
+                    message.embed = {
+                        oneofKind: "external",
+                        external: ViewExternal.internalBinaryRead(reader, reader.uint32(), options, (message.embed as any).external)
+                    };
+                    break;
+                case /* mg.tonymushah.lanitra_manga.Empty others */ 13:
+                    message.embed = {
+                        oneofKind: "others",
+                        others: Empty.internalBinaryRead(reader, reader.uint32(), options, (message.embed as any).others)
+                    };
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -734,9 +686,18 @@ class PostViewMessage$Type extends MessageType<PostViewMessage> {
         /* optional mg.tonymushah.lanitra_manga.RichTextDetails content = 9; */
         if (message.content)
             RichTextDetails.internalBinaryWrite(message.content, writer.tag(9, WireType.LengthDelimited).fork(), options).join();
-        /* repeated mg.tonymushah.lanitra_manga.posts.view.PostViewEmbeded embeds = 10; */
-        for (let i = 0; i < message.embeds.length; i++)
-            PostViewEmbeded.internalBinaryWrite(message.embeds[i], writer.tag(10, WireType.LengthDelimited).fork(), options).join();
+        /* mg.tonymushah.lanitra_manga.posts.view.ViewImages images = 10; */
+        if (message.embed.oneofKind === "images")
+            ViewImages.internalBinaryWrite(message.embed.images, writer.tag(10, WireType.LengthDelimited).fork(), options).join();
+        /* mg.tonymushah.lanitra_manga.posts.view.ViewVideo video = 11; */
+        if (message.embed.oneofKind === "video")
+            ViewVideo.internalBinaryWrite(message.embed.video, writer.tag(11, WireType.LengthDelimited).fork(), options).join();
+        /* mg.tonymushah.lanitra_manga.posts.view.ViewExternal external = 12; */
+        if (message.embed.oneofKind === "external")
+            ViewExternal.internalBinaryWrite(message.embed.external, writer.tag(12, WireType.LengthDelimited).fork(), options).join();
+        /* mg.tonymushah.lanitra_manga.Empty others = 13; */
+        if (message.embed.oneofKind === "others")
+            Empty.internalBinaryWrite(message.embed.others, writer.tag(13, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

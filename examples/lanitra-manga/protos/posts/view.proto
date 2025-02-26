@@ -31,14 +31,6 @@ message ViewExternal {
     optional string thumb = 4;
 }
 
-message PostViewEmbeded {
-    oneof media {
-        ViewImages images = 1;
-        ViewVideo video = 2;
-        ViewExternal external = 3;
-    }
-}
-
 message PostViewMessage {
     string cid = 1;
     string uri = 2;
@@ -49,7 +41,12 @@ message PostViewMessage {
     optional int64 repost_cound = 7;
     string indexed_at = 8;
     optional mg.tonymushah.lanitra_manga.RichTextDetails content = 9;
-    repeated PostViewEmbeded embeds = 10;
+    oneof embed {
+        ViewImages images = 10;
+        ViewVideo video = 11;
+        ViewExternal external = 12;
+        mg.tonymushah.lanitra_manga.Empty others = 13;
+    }
 }
 
 message ViewPostThreadRequest {
