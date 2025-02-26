@@ -1,6 +1,7 @@
-use std::str::FromStr;
+use std::{num::NonZeroU64, str::FromStr};
 
 use atrium_api::{
+    app::bsky::embed::defs::{AspectRatio, AspectRatioData},
     com::atproto::repo::{
         create_record::OutputData as CreateRecordOutput, defs::CommitMetaData,
         put_record::OutputData as PutRecordOutput, strong_ref::MainData,
@@ -127,5 +128,30 @@ impl From<PutRecordOutput> for crate::DataRef {
             commit: value.commit.map(|i| i.data.into()),
             validation_status: value.validation_status,
         }
+    }
+}
+
+impl From<AspectRatio> for crate::AspectRatio {
+    fn from(value: AspectRatio) -> Self {
+        value.data.into()
+    }
+}
+
+impl From<AspectRatioData> for crate::AspectRatio {
+    fn from(value: AspectRatioData) -> Self {
+        Self {
+            height: value.height.into(),
+            width: value.height.into(),
+        }
+    }
+}
+
+impl TryFrom<crate::AspectRatio> for AspectRatioData {
+    type Error = <NonZeroU64 as TryFrom<u64>>::Error;
+    fn try_from(value: crate::AspectRatio) -> Result<Self, Self::Error> {
+        Ok(Self {
+            height: value.height.try_into()?,
+            width: value.width.try_into()?,
+        })
     }
 }
