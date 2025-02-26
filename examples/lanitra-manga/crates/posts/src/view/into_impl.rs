@@ -1,18 +1,86 @@
 use atrium_api::{
-    app::bsky::feed::{
-        defs::{
-            BlockedPostData, NotFoundPostData, PostViewData, ReplyRefData, ReplyRefParentRefs,
-            ReplyRefRootRefs, ThreadViewPostData, ThreadViewPostParentRefs,
-            ThreadViewPostRepliesItem,
+    app::bsky::{
+        embed::{
+            external::ViewExternalData,
+            images::{ViewData as ViewImagesData, ViewImageData},
+            video::ViewData as ViewVideoData,
         },
-        get_post_thread::OutputThreadRefs,
-        post::RecordData as PostRecordData,
+        feed::{
+            defs::{
+                BlockedPostData, NotFoundPostData, PostViewData, PostViewEmbedRefs, ReplyRefData,
+                ReplyRefParentRefs, ReplyRefRootRefs, ThreadViewPostData, ThreadViewPostParentRefs,
+                ThreadViewPostRepliesItem,
+            },
+            get_post_thread::OutputThreadRefs,
+            post::RecordData as PostRecordData,
+        },
     },
     types::{TryFromUnknown, Union},
 };
 use bsky_sdk::rich_text::RichText;
+use lanitra_manga_commons::Empty;
 
 use super::{thread_view_post_inner::ActualPost, ThreadViewPostInner};
+
+impl From<ViewExternalData> for super::ViewExternal {
+    fn from(value: ViewExternalData) -> Self {
+        Self {
+            description: value.description,
+            title: value.title,
+            uri: value.uri,
+            thumb: value.thumb,
+        }
+    }
+}
+
+impl From<ViewVideoData> for super::ViewVideo {
+    fn from(value: ViewVideoData) -> Self {
+        Self {
+            alt: value.alt,
+            cid: value.cid.as_ref().to_string(),
+            playlist: value.playlist,
+            thumbnail: value.thumbnail,
+            ratio: value.aspect_ratio.map(Into::into),
+        }
+    }
+}
+
+impl From<ViewImageData> for super::ViewImage {
+    fn from(value: ViewImageData) -> Self {
+        Self {
+            fullsize: value.fullsize,
+            thumb: value.thumb,
+            alt: value.alt,
+            ratio: value.aspect_ratio.map(Into::into),
+        }
+    }
+}
+
+impl From<ViewImagesData> for super::ViewImages {
+    fn from(value: ViewImagesData) -> Self {
+        Self {
+            images: value
+                .images
+                .into_iter()
+                .map(|o| o.data)
+                .map(Into::into)
+                .collect(),
+        }
+    }
+}
+
+impl From<PostViewEmbedRefs> for super::post_view_message::Embed {
+    fn from(value: PostViewEmbedRefs) -> Self {
+        match value {
+            PostViewEmbedRefs::AppBskyEmbedImagesView(object) => Self::Images(object.data.into()),
+            PostViewEmbedRefs::AppBskyEmbedVideoView(object) => Self::Video(object.data.into()),
+            PostViewEmbedRefs::AppBskyEmbedExternalView(object) => {
+                Self::External(object.data.external.data.into())
+            }
+            _ => Self::Others(Empty {}),
+        }
+    }
+}
 
 impl From<PostViewData> for super::PostViewMessage {
     fn from(value: PostViewData) -> Self {
@@ -28,6 +96,10 @@ impl From<PostViewData> for super::PostViewMessage {
             content: PostRecordData::try_from_unknown(value.record.clone())
                 .ok()
                 .map(|content| RichText::new(&content.text, content.facets.clone()).into()),
+            embed: match value.embed {
+                Some(Union::Refs(embed)) => Some(embed.into()),
+                _ => None,
+            },
         }
     }
 }
