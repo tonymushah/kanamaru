@@ -102,6 +102,19 @@ export interface MainData {
      */
     uri: string;
 }
+/**
+ * @generated from protobuf message mg.tonymushah.lanitra_manga.AspectRatio
+ */
+export interface AspectRatio {
+    /**
+     * @generated from protobuf field: uint64 height = 1;
+     */
+    height: bigint;
+    /**
+     * @generated from protobuf field: uint64 width = 2;
+     */
+    width: bigint;
+}
 // @generated message type with reflection information, may provide speed optimized methods
 class Empty$Type extends MessageType<Empty> {
     constructor() {
@@ -470,6 +483,61 @@ class MainData$Type extends MessageType<MainData> {
  * @generated MessageType for protobuf message mg.tonymushah.lanitra_manga.MainData
  */
 export const MainData = new MainData$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class AspectRatio$Type extends MessageType<AspectRatio> {
+    constructor() {
+        super("mg.tonymushah.lanitra_manga.AspectRatio", [
+            { no: 1, name: "height", kind: "scalar", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "width", kind: "scalar", T: 4 /*ScalarType.UINT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<AspectRatio>): AspectRatio {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.height = 0n;
+        message.width = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<AspectRatio>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: AspectRatio): AspectRatio {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint64 height */ 1:
+                    message.height = reader.uint64().toBigInt();
+                    break;
+                case /* uint64 width */ 2:
+                    message.width = reader.uint64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: AspectRatio, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint64 height = 1; */
+        if (message.height !== 0n)
+            writer.tag(1, WireType.Varint).uint64(message.height);
+        /* uint64 width = 2; */
+        if (message.width !== 0n)
+            writer.tag(2, WireType.Varint).uint64(message.width);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mg.tonymushah.lanitra_manga.AspectRatio
+ */
+export const AspectRatio = new AspectRatio$Type();
 /**
  * @generated ServiceType for protobuf service mg.tonymushah.lanitra_manga.Utils
  */

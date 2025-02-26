@@ -5,6 +5,40 @@ import "profiles.proto";
 
 package mg.tonymushah.lanitra_manga.posts.view;
 
+message ViewImage {
+    string fullsize = 1;
+    string thumb = 2;
+    string alt = 3;
+    optional mg.tonymushah.lanitra_manga.AspectRatio ratio = 4;
+}
+
+message ViewImages {
+    repeated ViewImage images = 1;
+}
+
+message ViewVideo {
+    optional string alt = 1;
+    string cid = 2;
+    string playlist = 3;
+    optional string thumbnail = 4;
+    optional mg.tonymushah.lanitra_manga.AspectRatio ratio = 5; 
+}
+
+message ViewExternal {
+    string description = 1;
+    string title = 2;
+    string uri = 3;
+    optional string thumb = 4;
+}
+
+message PostViewEmbeded {
+    oneof media {
+        ViewImages images = 1;
+        ViewVideo video = 2;
+        ViewExternal external = 3;
+    }
+}
+
 message PostViewMessage {
     string cid = 1;
     string uri = 2;
@@ -15,6 +49,7 @@ message PostViewMessage {
     optional int64 repost_cound = 7;
     string indexed_at = 8;
     optional mg.tonymushah.lanitra_manga.RichTextDetails content = 9;
+    repeated PostViewEmbeded embeds = 10;
 }
 
 message ViewPostThreadRequest {

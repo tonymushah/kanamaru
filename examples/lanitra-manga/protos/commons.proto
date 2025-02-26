@@ -40,3 +40,8 @@ service Utils {
     rpc getRichTextDetails(RichText) returns (RichTextDetails);
     rpc getRichTextDetailsStream(stream RichText) returns (stream RichTextDetails);
 }
+
+message AspectRatio {
+    uint64 height = 1;
+    uint64 width = 2;
+}
