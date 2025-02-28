@@ -1,2 +1,22 @@
+
+[[extend]]
+path = "./examples/lanitra-manga/Makefile.toml"
+
 [config]
 default_to_workspace = false
+
+[tasks.clippy]
+command = "cargo"
+args = ["clippy", "--worskpace"]
+
+[tasks.doc]
+command = "cargo"
+args = ["doc", "--workspace"]
+
+[tasks.fetch]
+command = "cargo"
+args = ["fetch"]
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]

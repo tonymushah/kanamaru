@@ -1,0 +1,10 @@
+[config]
+default_to_workspace = true
+
+[tasks.lanitra_manga_dev]
+command = "pnpm"
+args = ["tauri", "dev"]
+
+[tasks.lanitra_manga_install]
+command = "pnpm"
+args = ["install"]
