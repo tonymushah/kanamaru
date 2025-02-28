@@ -24,7 +24,8 @@ impl<S: Service> ToTokens for CodegenResponderBuilder<'_, S> {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let service_responder = quote::format_ident!("{}Responder", self.service.name());
         let service_trait = quote::format_ident!("{}", self.service.name());
-        let service_mod = quote::format_ident!("{}_responder", naive_snake_case(self.service.name()));
+        let service_mod =
+            quote::format_ident!("{}_responder", naive_snake_case(self.service.name()));
         let package = if self.emit_package {
             self.service.package()
         } else {

@@ -41,7 +41,8 @@ impl<R: Runtime> Default for Routes<R> {
 
 impl<R: Runtime> Routes<R> {
     pub fn insert_responder(&mut self, responder: impl Responder<R> + Send + Sync + 'static) {
-        self.0.insert(responder.service_name(), Arc::new(Box::new(responder)));
+        self.0
+            .insert(responder.service_name(), Arc::new(Box::new(responder)));
     }
     pub fn add_responder(mut self, responder: impl Responder<R> + Send + Sync + 'static) -> Self {
         self.insert_responder(responder);
