@@ -22,6 +22,7 @@
   "dependencies": {
     "@protobuf-ts/runtime": "2",
     "@protobuf-ts/runtime-rpc": "2",
+    "@tanstack/svelte-query": "^5.66.9",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
     "kanamaru-transport": "path:../../../../packages/kanamaru-transport",
