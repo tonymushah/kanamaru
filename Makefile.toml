@@ -7,7 +7,7 @@ default_to_workspace = false
 
 [tasks.clippy]
 command = "cargo"
-args = ["clippy", "--worskpace"]
+args = ["clippy", "--workspace"]
 
 [tasks.doc]
 command = "cargo"
@@ -20,3 +20,6 @@ args = ["fetch"]
 [tasks.clean]
 command = "cargo"
 args = ["clean"]
+
+[tasks.clippy-clean]
+dependencies = ["clippy", "clean"]
