@@ -1,6 +1,6 @@
 # kanamaru (WIP)
 
-**Build typed Tauri plugins with the power of [gRPC][grpc] and protobuf**
+**Build typed Tauri plugins with the power of [Protobuf Buffers][protobuf]**
 
 I have implemented the basics, but it is still a work in progress because the `lanitra-manga` example is not done yet.
 
@@ -17,4 +17,4 @@ I have implemented the basics, but it is still a work in progress because the `l
 ## License
 MIT
 
-[grpc]: []
+[protobuf]: [https://protobuf.dev/]
