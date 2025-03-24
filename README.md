@@ -12,7 +12,7 @@ I have implemented the basics, but it is still a work in progress because the `l
 - [X] Tauri plugin permission support
 - [X] Typescript Proto transport
 - [X] A basic example
-- [X] a complex example (lanitra-manga)
+- [ ] a complex example (lanitra-manga)
 
 ## License
 MIT
