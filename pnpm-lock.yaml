@@ -142,9 +142,6 @@ importers:
       core-js:
         specifier: '3'
         version: 3.39.0
-      wonka:
-        specifier: '6'
-        version: 6.3.4
     devDependencies:
       tsup:
         specifier: '8'
@@ -1748,9 +1745,6 @@ packages:
     engines: {node: '>=8'}
     hasBin: true
 
-  wonka@6.3.4:
-    resolution: {integrity: sha512-CjpbqNtBGNAeyNS/9W6q3kSkKE52+FjIj7AkFlLr11s/VWGUu6a2CdYSdGxocIhIVjaW/zchesBQUKPVU69Cqg==}
-
   wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
     engines: {node: '>=10'}
@@ -3320,8 +3314,6 @@ snapshots:
     dependencies:
       siginfo: 2.0.0
       stackback: 0.0.2
-
-  wonka@6.3.4: {}
 
   wrap-ansi@7.0.0:
     dependencies:

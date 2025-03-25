@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "repository": "https://github.com/tonymushah/kanamaru",
-  "homepage": "https://github.com/tonymushah/mizuki/tree/main/packages/kanamaru-transport",
+  "homepage": "https://github.com/tonymushah/kanamaru/tree/main/packages/kanamaru-transport",
   "bugs": "https://github.com/tonymushah/kanamaru/issues",
   "keywords": [
     "tauri",
@@ -31,7 +31,6 @@
     "@protobuf-ts/runtime": "2",
     "@protobuf-ts/runtime-rpc": "2",
     "@tauri-apps/api": "2",
-    "core-js": "3",
-    "wonka": "6"
+    "core-js": "3"
   }
 }
