@@ -42,3 +42,5 @@ bsky-sdk = "0.1.16"
 
 [workspace.package]
 authors = ["tonymushah <tonymushahDev06@yahoo.com>"]
+license-file = "LICENSE"
+readme = "./README.md"
