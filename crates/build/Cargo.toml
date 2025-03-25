@@ -5,6 +5,7 @@ authors.workspace = true
 edition = "2021"
 description = "the build script required for kanamaru"
 license-file = { workspace = true }
+repository = { workspace = true }
 
 [dependencies]
 proc-macro2 = { workspace = true }

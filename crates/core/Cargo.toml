@@ -5,6 +5,7 @@ edition = "2021"
 authors.workspace = true
 license-file = { workspace = true }
 description = "Build typed Tauri plugins with the power of Protobuf Buffers"
+repository.workspace = true
 
 [dependencies]
 async-trait.workspace = true
