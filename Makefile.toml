@@ -23,3 +23,15 @@ args = ["clean"]
 
 [tasks.clippy-clean]
 dependencies = ["clippy", "clean"]
+
+[tasks.publish-ts-transport]
+command = "pnpm"
+args = ["publish", "packages/kanamaru-transport"]
+
+[tasks.publish-core]
+command = "cargo"
+args = ["publish", "-p", "kanamaru"]
+
+[tasks.publish-build]
+command = "cargo"
+args = ["publish", "-p", "kanamaru-build"]
