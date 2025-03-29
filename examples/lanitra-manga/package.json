@@ -20,6 +20,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@fontsource-variable/sora": "^5.2.5",
     "@protobuf-ts/runtime": "2",
     "@protobuf-ts/runtime-rpc": "2",
     "@tanstack/svelte-query": "^5.66.9",

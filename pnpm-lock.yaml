@@ -66,6 +66,9 @@ importers:
 
   examples/lanitra-manga:
     dependencies:
+      '@fontsource-variable/sora':
+        specifier: ^5.2.5
+        version: 5.2.5
       '@protobuf-ts/runtime':
         specifier: '2'
         version: 2.9.4
@@ -90,6 +93,15 @@ importers:
       svelte-exmarkdown:
         specifier: ^4.0.3
         version: 4.0.3(svelte@5.19.10)
+      svelte-feather-icons:
+        specifier: ^4.2.0
+        version: 4.2.0
+      svelte-remixicon:
+        specifier: ^2.7.0
+        version: 2.7.0(svelte@5.19.10)
+      swiper:
+        specifier: ^11.2.6
+        version: 11.2.6
     devDependencies:
       '@protobuf-ts/plugin':
         specifier: '2'
@@ -463,6 +475,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@fontsource-variable/sora@5.2.5':
+    resolution: {integrity: sha512-SNS88JcSleEcqN5j1S0WWltrC9VtIckaSYNm1cpL+LjI5UgGTOwMRcOw7O9It3TOrKlpHFliY7u2Cni5BvxR0w==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -1489,9 +1504,25 @@ packages:
     peerDependencies:
       svelte: ^5.1.3
 
+  svelte-feather-icons@4.2.0:
+    resolution: {integrity: sha512-KuMTDrL6sA8aCxBv3RMgmmnnyIaAXaYcmWkmNa2r2Qj70vi+An2T6ZBAdiZr6wjx+a3eZJy+FRseeRkzQFGHPw==}
+
+  svelte-remixicon@2.7.0:
+    resolution: {integrity: sha512-4KPsjedRlsk+IG3ESnd7VUadvFu24SkVcK8TNm6+Zipxv0bsFSvGUYlCgP0sIuG5uwj0bv1fB8KseSlqGzAvsg==}
+    peerDependencies:
+      svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
+
+  svelte@3.59.2:
+    resolution: {integrity: sha512-vzSyuGr3eEoAtT/A6bmajosJZIUWySzY2CzB3w2pgPvnkUjGqlDnsNnA0PMO+mMAhuyMul6C2uuZzY6ELSkzyA==}
+    engines: {node: '>= 8'}
+
   svelte@5.19.10:
     resolution: {integrity: sha512-7lId+z36IZWzuo0N0oGOStEPi3/Wv1VQEnIzMmDaLDSlJSruKplhhVr+NaZ0Wh7ZILfOjbeU7PbTjqmQQYZF4A==}
     engines: {node: '>=18'}
+
+  swiper@11.2.6:
+    resolution: {integrity: sha512-8aXpYKtjy3DjcbzZfz+/OX/GhcU5h+looA6PbAzHMZT6ESSycSp9nAjPCenczgJyslV+rUGse64LMGpWE3PX9Q==}
+    engines: {node: '>= 4.7.0'}
 
   thenify-all@1.6.0:
     resolution: {integrity: sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==}
@@ -1922,6 +1953,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.24.2':
     optional: true
+
+  '@fontsource-variable/sora@5.2.5': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -3075,6 +3108,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  svelte-feather-icons@4.2.0:
+    dependencies:
+      svelte: 3.59.2
+
+  svelte-remixicon@2.7.0(svelte@5.19.10):
+    dependencies:
+      svelte: 5.19.10
+
+  svelte@3.59.2: {}
+
   svelte@5.19.10:
     dependencies:
       '@ampproject/remapping': 2.3.0
@@ -3091,6 +3134,8 @@ snapshots:
       locate-character: 3.0.0
       magic-string: 0.30.15
       zimmerframe: 1.1.2
+
+  swiper@11.2.6: {}
 
   thenify-all@1.6.0:
     dependencies:
