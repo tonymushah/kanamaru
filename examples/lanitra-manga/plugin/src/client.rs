@@ -24,6 +24,8 @@ pub struct ReqwestInnerClient {
 
 impl ReqwestInnerClient {
     pub fn new(client: Client, config: &Config) -> Self {
+        #[cfg(debug_assertions)]
+        println!("{}", config.bsk_config.endpoint.as_str());
         Self {
             client: client.clone(),
             bsky_reqwest: ReqwestClientBuilder::new(config.bsk_config.endpoint.as_str())

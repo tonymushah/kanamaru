@@ -25,6 +25,9 @@
     "lanitra-manga": {
       "home": {
         "feed": "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot"
+      },
+      "bsk_config": {
+        "endpoint": "https://api.bsky.app"
       }
     }
   },
