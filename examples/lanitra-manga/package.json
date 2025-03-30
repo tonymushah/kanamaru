@@ -21,27 +21,30 @@
   "license": "MIT",
   "dependencies": {
     "@fontsource-variable/sora": "^5.2.5",
-    "@protobuf-ts/runtime": "2",
-    "@protobuf-ts/runtime-rpc": "2",
-    "@tanstack/svelte-query": "^5.66.9",
-    "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-opener": "^2",
-    "kanamaru-transport": "path:../../../../packages/kanamaru-transport",
+    "@protobuf-ts/runtime": "^2.9.6",
+    "@protobuf-ts/runtime-rpc": "^2.9.6",
+    "@tanstack/svelte-query": "^5.71.0",
+    "@tauri-apps/api": "^2.4.0",
+    "@tauri-apps/plugin-opener": "^2.2.6",
+    "kanamaru-transport": "link:../../packages/kanamaru-transport",
     "lodash": "^4.17.21",
-    "svelte-exmarkdown": "^4.0.3"
+    "svelte-exmarkdown": "^4.0.3",
+    "svelte-feather-icons": "^4.2.0",
+    "svelte-remixicon": "^2.7.0",
+    "swiper": "^11.2.6"
   },
   "devDependencies": {
-    "@protobuf-ts/plugin": "2",
+    "@protobuf-ts/plugin": "^2.9.6",
     "@sveltejs/adapter-static": "^3.0.8",
-    "@sveltejs/kit": "^2.9.0",
-    "@sveltejs/vite-plugin-svelte": "^5.0.0",
-    "@tauri-apps/cli": "^2",
-    "@types/lodash": "^4.17.15",
-    "sass": "^1.85.0",
-    "svelte": "5",
-    "svelte-check": "4",
-    "typescript": "5",
-    "vite": "6",
-    "vite-plugin-kit-routes": "^0.8.1"
+    "@sveltejs/kit": "^2.20.2",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tauri-apps/cli": "^2.4.0",
+    "@types/lodash": "^4.17.16",
+    "sass": "^1.86.0",
+    "svelte": "^5.25.3",
+    "svelte-check": "^4.1.5",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.3",
+    "vite-plugin-kit-routes": "^0.8.4"
   }
 }
