@@ -9,7 +9,7 @@ message ViewImage {
     string fullsize = 1;
     string thumb = 2;
     string alt = 3;
-    optional mg.tonymushah.lanitra_manga.AspectRatio ratio = 4;
+    optional mg.tonymushah.lanitra_manga.commons.AspectRatio ratio = 4;
 }
 
 message ViewImages {
@@ -21,7 +21,7 @@ message ViewVideo {
     string cid = 2;
     string playlist = 3;
     optional string thumbnail = 4;
-    optional mg.tonymushah.lanitra_manga.AspectRatio ratio = 5; 
+    optional mg.tonymushah.lanitra_manga.commons.AspectRatio ratio = 5; 
 }
 
 message ViewExternal {
@@ -40,12 +40,12 @@ message PostViewMessage {
     optional int64 reply_count = 6;
     optional int64 repost_cound = 7;
     string indexed_at = 8;
-    optional mg.tonymushah.lanitra_manga.RichTextDetails content = 9;
+    optional mg.tonymushah.lanitra_manga.commons.RichTextDetails content = 9;
     oneof embed {
         ViewImages images = 10;
         ViewVideo video = 11;
         ViewExternal external = 12;
-        mg.tonymushah.lanitra_manga.Empty others = 13;
+        mg.tonymushah.lanitra_manga.commons.Empty others = 13;
     }
 }
 

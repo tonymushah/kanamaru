@@ -34,7 +34,7 @@ message EmbededExternals {
 }
 
 message EmbededPost {
-    mg.tonymushah.lanitra_manga.MainData post = 1;
+    mg.tonymushah.lanitra_manga.commons.MainData post = 1;
 }
 
 message EmbededPosts {
@@ -42,7 +42,7 @@ message EmbededPosts {
 }
 
 message EmbededPostWithMedia {
-    mg.tonymushah.lanitra_manga.MainData post = 1;
+    mg.tonymushah.lanitra_manga.commons.MainData post = 1;
     oneof media {
         EmbededImages images = 2;
         EmbededExternals externals = 3;
@@ -56,7 +56,7 @@ message EmbededPostWithMedias {
 
 message PostRecord {
     optional string datetime = 1;
-    mg.tonymushah.lanitra_manga.RichText text = 2;
+    mg.tonymushah.lanitra_manga.commons.RichText text = 2;
     repeated PostRecord replies = 3;
     oneof embeded {
         EmbededImages images = 4;
@@ -68,12 +68,12 @@ message PostRecord {
 }
 
 message ClearPostsServiceResponses {
-    optional mg.tonymushah.lanitra_manga.DataRef root = 1;
+    optional mg.tonymushah.lanitra_manga.commons.DataRef root = 1;
 }
 
 service PostsService {
-    rpc post (PostRecord) returns (mg.tonymushah.lanitra_manga.DataRef);
-    rpc replyToLastPost(stream PostRecord) returns (mg.tonymushah.lanitra_manga.DataRef);
-    rpc makeThreadStream(stream PostRecord) returns (mg.tonymushah.lanitra_manga.DataRef);
-    rpc clear(mg.tonymushah.lanitra_manga.Empty) returns (ClearPostsServiceResponses);
+    rpc post (PostRecord) returns (mg.tonymushah.lanitra_manga.commons.DataRef);
+    rpc replyToLastPost(stream PostRecord) returns (mg.tonymushah.lanitra_manga.commons.DataRef);
+    rpc makeThreadStream(stream PostRecord) returns (mg.tonymushah.lanitra_manga.commons.DataRef);
+    rpc clear(mg.tonymushah.lanitra_manga.commons.Empty) returns (ClearPostsServiceResponses);
 }

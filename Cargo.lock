@@ -2337,7 +2337,7 @@ dependencies = [
  "atrium-api",
  "bsky-sdk",
  "kanamaru",
- "kanamaru-build",
+ "lanitra-manga-proto-build",
  "prost",
 ]
 
@@ -2348,7 +2348,7 @@ dependencies = [
  "atrium-api",
  "bsky-sdk",
  "kanamaru",
- "kanamaru-build",
+ "lanitra-manga-proto-build",
  "prost",
 ]
 
@@ -2359,10 +2359,10 @@ dependencies = [
  "atrium-api",
  "bsky-sdk",
  "kanamaru",
- "kanamaru-build",
  "lanitra-manga-commons",
  "lanitra-manga-posts",
  "lanitra-manga-profiles",
+ "lanitra-manga-proto-build",
  "prost",
 ]
 
@@ -2373,9 +2373,9 @@ dependencies = [
  "atrium-api",
  "bsky-sdk",
  "kanamaru",
- "kanamaru-build",
  "lanitra-manga-commons",
  "lanitra-manga-profiles",
+ "lanitra-manga-proto-build",
  "prost",
 ]
 
@@ -2386,9 +2386,16 @@ dependencies = [
  "atrium-api",
  "bsky-sdk",
  "kanamaru",
- "kanamaru-build",
  "lanitra-manga-commons",
+ "lanitra-manga-proto-build",
  "prost",
+]
+
+[[package]]
+name = "lanitra-manga-proto-build"
+version = "0.1.0"
+dependencies = [
+ "kanamaru-build",
 ]
 
 [[package]]

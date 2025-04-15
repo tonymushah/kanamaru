@@ -1,5 +1,11 @@
+use lanitra_manga_proto_build::BuildConfig;
+
 fn main() {
-    kanamaru_build::ProstBuilder::default()
-        .compile_protos(&["../../protos/feeds.proto"], &["../../protos"])
-        .unwrap();
+    BuildConfig {
+        feeds: false,
+        ..Default::default()
+    }
+    .builder()
+    .compile_protos(&["../../protos/feeds.proto"], &["../../protos"])
+    .unwrap();
 }

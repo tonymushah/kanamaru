@@ -39,6 +39,7 @@ reqwest = "0.12.12"
 # Lanitra manga example dependencies
 atrium-api = "0.25.0"
 bsky-sdk = "0.1.16"
+lanitra-manga-proto-build = { path = "./examples/lanitra-manga/crates/proto-build" }
 
 [workspace.package]
 authors = ["tonymushah <tonymushahDev06@yahoo.com>"]

@@ -1,0 +1,13 @@
+[package]
+name = "lanitra-manga-proto-build"
+version = "0.1.0"
+edition = "2024"
+authors.workspace = true
+license-file.workspace = true
+readme.workspace = true
+repository.workspace = true
+
+[dependencies]
+kanamaru-build = { workspace = true, default-features = false, features = [
+    "prost",
+] }

@@ -5,9 +5,7 @@ edition = "2021"
 authors.workspace = true
 
 [build-dependencies]
-kanamaru-build = { workspace = true, default-features = false, features = [
-    "prost",
-] }
+lanitra-manga-proto-build.workspace = true
 
 [dependencies]
 kanamaru = { workspace = true }

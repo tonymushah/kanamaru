@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package mg.tonymushah.lanitra_manga;
+package mg.tonymushah.lanitra_manga.commons;
 
 message Empty {}
 

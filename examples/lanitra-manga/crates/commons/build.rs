@@ -1,5 +1,11 @@
+use lanitra_manga_proto_build::BuildConfig;
+
 fn main() {
-    kanamaru_build::ProstBuilder::default()
-        .compile_protos(&["../../protos/commons.proto"], &["../../protos/"])
-        .unwrap();
+    BuildConfig {
+        commons: false,
+        ..Default::default()
+    }
+    .builder()
+    .compile_protos(&["../../protos/commons.proto"], &["../../protos/"])
+    .unwrap();
 }
