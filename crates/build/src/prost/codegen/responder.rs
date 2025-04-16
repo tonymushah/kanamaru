@@ -181,6 +181,7 @@ impl<S: Service> GenerateResponderService<'_, S> {
                         let _abort = handle.abort_handle();
                         let res = select! {
                             _ = cancel_token.cancelled() => {
+                                _abort.abort();
                                 Err(Status::aborted("Aborted task").into())
                             },
                             res = handle => {
@@ -195,10 +196,7 @@ impl<S: Service> GenerateResponderService<'_, S> {
             }
         };
         quote! {
-            #name_method => {
-                #resp
-            },
-            #path_method => {
+            #name_method | #path_method => {
                 #resp
             },
         }
