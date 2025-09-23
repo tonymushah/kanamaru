@@ -89,7 +89,7 @@ fn convert_type(
 ) -> TokenStream {
     if (is_google_type(proto_type) && !compile_well_known_types)
         || rust_type.starts_with("::")
-        || NON_PATH_TYPE_ALLOWLIST.iter().any(|ty| *ty == rust_type)
+        || NON_PATH_TYPE_ALLOWLIST.contains(&rust_type)
     {
         rust_type.parse::<TokenStream>().unwrap()
     } else if rust_type.starts_with("crate::") {

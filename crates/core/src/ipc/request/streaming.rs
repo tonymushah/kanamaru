@@ -38,7 +38,7 @@ where
         f.debug_struct("SteamingRequest")
             .field("metadata", &self.metadata)
             .field("channel_status", &())
-            .field("stream", &self.stream)
+            .field("stream", &())
             .field("cancel_token", &self.cancel_token)
             .finish()
     }

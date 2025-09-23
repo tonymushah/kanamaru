@@ -28,7 +28,7 @@ impl<R: Runtime, M: Message + Clone + Default> Debug for UnaryRequest<R, M> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("UnaryRequest")
             .field("token", &self.token)
-            .field("message", &self.message)
+            .field("message", &())
             .field("channel_status", &())
             .field("headers", &self.headers)
             .finish()
