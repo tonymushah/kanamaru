@@ -15,15 +15,16 @@
   "browser": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.mts",
+  "type": "module",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
-    "tsup": "8",
+    "tsdown": "^0.15.4",
     "typescript": "5",
     "vitest": "2"
   },
