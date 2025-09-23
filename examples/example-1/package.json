@@ -21,7 +21,7 @@
     "@tauri-apps/api": "2",
     "@tauri-apps/plugin-opener": "2",
     "kanamaru-transport": "path:../../../../packages/kanamaru-transport",
-    "lodash": "^4.17.21"
+    "lodash": "4"
   },
   "devDependencies": {
     "@protobuf-ts/plugin": "2",
@@ -29,10 +29,10 @@
     "@sveltejs/kit": "2",
     "@sveltejs/vite-plugin-svelte": "5",
     "@tauri-apps/cli": "^2",
-    "@types/lodash": "^4.17.15",
+    "@types/lodash": "4",
     "svelte": "5",
     "svelte-check": "4",
     "typescript": "5",
-    "vite": "6"
+    "vite": "7"
   }
 }
