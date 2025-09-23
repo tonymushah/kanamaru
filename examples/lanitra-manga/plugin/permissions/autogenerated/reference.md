@@ -2,6 +2,8 @@
 
 lanitra-manga-rpc default permissions
 
+#### This default permission set includes the following:
+
 - `allow-client-streaming`
 - `allow-duplex`
 - `allow-unary`

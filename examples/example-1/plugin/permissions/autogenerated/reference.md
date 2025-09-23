@@ -2,6 +2,8 @@
 
 The default permission for this plugin
 
+#### This default permission set includes the following:
+
 - `allow-client-streaming`
 - `allow-duplex`
 - `allow-server-streaming`

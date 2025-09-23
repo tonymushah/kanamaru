@@ -297,47 +297,56 @@
         {
           "description": "Enables the client_streaming command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-client-streaming"
+          "const": "allow-client-streaming",
+          "markdownDescription": "Enables the client_streaming command without any pre-configured scope."
         },
         {
           "description": "Denies the client_streaming command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-client-streaming"
+          "const": "deny-client-streaming",
+          "markdownDescription": "Denies the client_streaming command without any pre-configured scope."
         },
         {
           "description": "Enables the duplex command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-duplex"
+          "const": "allow-duplex",
+          "markdownDescription": "Enables the duplex command without any pre-configured scope."
         },
         {
           "description": "Denies the duplex command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-duplex"
+          "const": "deny-duplex",
+          "markdownDescription": "Denies the duplex command without any pre-configured scope."
         },
         {
           "description": "Enables the server_streaming command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-server-streaming"
+          "const": "allow-server-streaming",
+          "markdownDescription": "Enables the server_streaming command without any pre-configured scope."
         },
         {
           "description": "Denies the server_streaming command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-server-streaming"
+          "const": "deny-server-streaming",
+          "markdownDescription": "Denies the server_streaming command without any pre-configured scope."
         },
         {
           "description": "Enables the unary command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-unary"
+          "const": "allow-unary",
+          "markdownDescription": "Enables the unary command without any pre-configured scope."
         },
         {
           "description": "Denies the unary command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-unary"
+          "const": "deny-unary",
+          "markdownDescription": "Denies the unary command without any pre-configured scope."
         },
         {
-          "description": "The default permission for this plugin",
+          "description": "The default permission for this plugin\n#### This default permission set includes:\n\n- `allow-client-streaming`\n- `allow-duplex`\n- `allow-server-streaming`\n- `allow-unary`",
           "type": "string",
-          "const": "default"
+          "const": "default",
+          "markdownDescription": "The default permission for this plugin\n#### This default permission set includes:\n\n- `allow-client-streaming`\n- `allow-duplex`\n- `allow-server-streaming`\n- `allow-unary`"
         }
       ]
     }
