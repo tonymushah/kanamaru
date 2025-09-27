@@ -4,27 +4,25 @@ import {
 	DuplexStreamingCall,
 	mergeRpcOptions,
 	RpcError,
-	RpcInputStream,
 	RpcMetadata,
-	RpcOutputStreamController,
 	RpcStatus,
 	ServerStreamingCall,
 	UnaryCall,
 	type MethodInfo,
 	type RpcOptions,
-	type RpcTransport,
+	type RpcTransport
 } from "@protobuf-ts/runtime-rpc";
-import { Channel, invoke } from "@tauri-apps/api/core";
+import { Channel } from "@tauri-apps/api/core";
+import { UnlistenFn } from "@tauri-apps/api/event";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 import "core-js/actual/typed-array/from-base64";
 import "core-js/actual/typed-array/to-base64";
-import { Code } from "./status-code";
-import { convertGrpcMeta, IpcMessageBase, isMessage, isStatus, KanamaruStatus, RawReqwest, ServerStreamingResponse, generate_event_id, DeferredFunction } from "./commons";
 import ClientStreamingStreamController from "./client-stream-controller";
+import { convertGrpcMeta, DeferredFunction, generate_event_id, IpcMessageBase, RawReqwest } from "./commons";
 import invokeCall, { InvokeType } from "./invoke";
 import make_cancel from "./make_cancel";
-import { UnlistenFn } from "@tauri-apps/api/event";
 import make_server_streaming from "./make_server_streaming";
+import { Code } from "./status-code";
 
 declare global {
 	interface Uint8ArrayConstructor {
