@@ -35,3 +35,18 @@ args = ["publish", "-p", "kanamaru"]
 [tasks.publish-build]
 command = "cargo"
 args = ["publish", "-p", "kanamaru-build"]
+
+[tasks.run-example-1]
+command = "pnpm"
+args = ["tauri", "dev"]
+cwd = "./examples/example-1"
+
+[tasks.run-lanitra-manga]
+command = "pnpm"
+args = ["tauri", "dev"]
+cwd = "./examples/lanitra-manga"
+
+[tasks.build-transport]
+command = "pnpm"
+args = ["build"]
+cwd = "./packages/kanamaru-transport"
