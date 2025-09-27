@@ -1,8 +1,8 @@
 [package]
 name = "kanamaru-build"
-version = "0.1.1"
+version = "1.0.0"
 authors.workspace = true
-edition = "2021"
+edition.workspace = true
 description = "the build script required for kanamaru"
 license-file = { workspace = true }
 repository = { workspace = true }
