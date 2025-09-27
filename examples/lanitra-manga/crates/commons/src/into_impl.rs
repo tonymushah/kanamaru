@@ -90,12 +90,23 @@ impl TryFrom<crate::DataRef> for MainData {
     }
 }
 
+#[derive(Debug, thiserror::Error)]
+#[error(transparent)]
+pub enum CommitMetaDataParseError {
+    Cid(cid::Error),
+    #[error("{0}")]
+    Tid(String),
+}
+
 impl TryFrom<crate::CommitMetadata> for CommitMetaData {
-    type Error = <Cid as FromStr>::Err;
+    type Error = CommitMetaDataParseError;
     fn try_from(value: crate::CommitMetadata) -> Result<Self, Self::Error> {
         Ok(Self {
-            cid: value.cid.parse()?,
-            rev: value.rev,
+            cid: value.cid.parse().map_err(CommitMetaDataParseError::Cid)?,
+            rev: value
+                .rev
+                .parse()
+                .map_err(|d: &'static str| CommitMetaDataParseError::Tid(d.into()))?,
         })
     }
 }
@@ -104,7 +115,7 @@ impl From<CommitMetaData> for crate::CommitMetadata {
     fn from(value: CommitMetaData) -> Self {
         Self {
             cid: value.cid.as_ref().to_string(),
-            rev: value.rev,
+            rev: value.rev.to_string(),
         }
     }
 }

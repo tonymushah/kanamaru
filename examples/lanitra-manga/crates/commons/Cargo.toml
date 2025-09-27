@@ -12,3 +12,5 @@ kanamaru = { workspace = true }
 prost = { workspace = true }
 bsky-sdk = { workspace = true }
 atrium-api = { workspace = true }
+thiserror = { workspace = true }
+cid = { workspace = true }

@@ -2359,9 +2359,11 @@ version = "0.1.0"
 dependencies = [
  "atrium-api",
  "bsky-sdk",
+ "cid",
  "kanamaru",
  "lanitra-manga-proto-build",
  "prost",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
